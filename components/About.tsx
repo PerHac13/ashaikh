@@ -16,7 +16,7 @@ export default function About() {
         Oh, the grandeur of it all! Embarking on my technical odyssey, I marveled at the complexity of printing &quot;Hello World&quot; in C. Who needs Shakespeare when you&apos;ve got this timeless masterpiece echoing through the command line? Since then, I&apos;ve traversed a path of continuous learning and exploration, understanding that development is more than just a code—it&apos;s a harmonious blend of practice, discipline, and unwavering dedication to core principles.   
         </p>
         <p className="text-start text-muted-foreground lg:px-6">
-            Outside of work, I&#39;m an avid reader, an amateur writer, can say appriciate good literature. I try to keep myself updated with the latest trends in technology and I am always looking for new opportunities to learn and grow. Looking forward, Just trying to feel the essence of what it means <span className="no-wrap text-primary dark:text-white">to be engineer</span>.
+            Outside of work, I&#39;m an avid reader, an amateur writer, can say appreciate good literature. I try to keep myself updated with the latest trends in technology and I am always looking for new opportunities to learn and grow. Looking forward, Just trying to feel the essence of what it means <span className="no-wrap text-primary dark:text-white">to be engineer</span>.
         </p>
       </div>
         </section>
