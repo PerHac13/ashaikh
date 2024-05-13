@@ -12,7 +12,7 @@ export const jobProjects = [
     },
     {
         "title": "ashaikh.com",
-        "imagePath":null,
+        "imagePath":"./projects/ashaikh.png",
         "link": "https://github.com/PerHac13/ashaikh",
         "featured": true,
         "timeline": "May 2024",
@@ -23,7 +23,7 @@ export const jobProjects = [
     },
     {
         "title": "OPCODE",
-        "imagePath":null,
+        "imagePath":"./projects/opcode.png",
         "link": "https://osf-ten.vercel.app/",
         "featured": true,
         "timeline": "Mar 2024",
@@ -56,7 +56,7 @@ export const jobProjects = [
     },
     {
         "title": "Jotion",
-        "imagePath":null,
+        "imagePath":"./projects/jotion.png",
         "link": "https://jotion-note-taking-app-sigma.vercel.app/",
         "featured": true,
         "timeline": "Dec 2023",
@@ -81,7 +81,7 @@ export const jobProjects = [
         "title":"SuperMarket Billing System",
         "imagePath":null,
         "link": "https://github.com/PerHac13/SuperMarket-Billing-System",
-        "featured": true,
+        "featured": false,
         "timeline": "Oct 2023",
         "tag":["Self Project","Command Line Interface"],
         "madeAt": "IIIT-Bhagalpur",
