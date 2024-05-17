@@ -12,7 +12,7 @@ export const jobProjects = [
     },
     {
         "title": "ashaikh.com",
-        "imagePath":"./projects/ashaikh.png",
+        "imagePath":"/projects/ashaikh.png",
         "link": "https://github.com/PerHac13/ashaikh",
         "featured": true,
         "timeline": "May 2024",
@@ -23,7 +23,7 @@ export const jobProjects = [
     },
     {
         "title": "OPCODE",
-        "imagePath":"./projects/opcode.png",
+        "imagePath":"/projects/opcode.png",
         "link": "https://osf-ten.vercel.app/",
         "featured": true,
         "timeline": "Mar 2024",
@@ -56,7 +56,7 @@ export const jobProjects = [
     },
     {
         "title": "Jotion",
-        "imagePath":"./projects/jotion.png",
+        "imagePath":"/projects/jotion.png",
         "link": "https://jotion-note-taking-app-sigma.vercel.app/",
         "featured": true,
         "timeline": "Dec 2023",
