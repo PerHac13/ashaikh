@@ -11,7 +11,7 @@ export const jobProjects = [
         "skill": ["React", "JavaScript", "Redux", "Ant Design"],
     },
     {
-        "title": "ashaikh.com",
+        "title": "ashaikh",
         "imagePath":"/projects/ashaikh.png",
         "link": "https://github.com/PerHac13/ashaikh",
         "featured": true,
