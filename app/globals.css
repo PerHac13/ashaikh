@@ -3,36 +3,28 @@
   @tailwind utilities;
 
   @layer base {
+    /* yellow, mustard, golden, and light browns. */
     :root {
-      --background: 0 0% 100%;
-      --foreground: 222.2 84% 4.9%;
-
-      --card: 0 0% 100%;
-      --card-foreground: 222.2 84% 4.9%;
-
-      --popover: 0 0% 100%;
-      --popover-foreground: 222.2 84% 4.9%;
-
-      --primary: 222.2 47.4% 11.2%;
-      --primary-foreground: 210 40% 98%;
-
-      --secondary: 210 40% 96.1%;
-      --secondary-foreground: 222.2 47.4% 11.2%;
-
-      --muted: 210 40% 96.1%;
-      --muted-foreground: 215.4 16.3% 46.9%;
-
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
-
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 40% 98%;
-
-      --border: 214.3 31.8% 91.4%;
-      --input: 214.3 31.8% 91.4%;
-      --ring: 222.2 84% 4.9%;
-
-      --radius: 0.5rem;
+      --background: 54 100% 96%; 
+      --foreground: 35 50% 20%; 
+      --card: 48 100% 92%; 
+      --card-foreground: 35 30% 15%; 
+      --popover: 54 100% 90%; 
+      --popover-foreground: 35 50% 20%;
+      --primary: 40 100% 50%; 
+      --primary-foreground: 35 30% 95%; 
+      --secondary: 45 100% 88%; 
+      --secondary-foreground: 35 50% 20%;
+      --muted: 60 20% 80%; 
+      --muted-foreground: 30 20% 40%; 
+      --accent: 32 100% 50%; 
+      --accent-foreground: 35 30% 95%;
+      --destructive: 6 100% 50%; 
+      --destructive-foreground: 35 30% 95%; 
+      --border: 60 20% 75%;
+      --input: 48 100% 88%;
+      --ring: 35 50% 20%; 
+      --radius: 0.4rem;
     }
 
     .dark {
