@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { MoveUpRight, MoveRight } from "lucide-react";
 import { jobProjects } from "@/constants/jobProjects";
+import placeHolderPic from '@/public/placeholder-image.png'
 
 export default function Projects() {
     const router= useRouter();
@@ -29,7 +30,7 @@ export default function Projects() {
             
           <a
             key={index}
-            href={project.link}
+            href={project.link ?? '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:cursor-pointer"
@@ -37,7 +38,11 @@ export default function Projects() {
             <Card className="group lg:p-6 mb-8 flex flex-col lg:flex-row w-full min-h-fit gap-0 lg:gap-5 border-transparent hover:border dark:lg:hover:border-t-blue-900 dark:lg:hover:bg-slate-800/50 lg:hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:hover:drop-shadow-lg lg:hover:bg-slate-100/50 lg:hover:border-t-blue-200">
               <CardHeader className="h-full w-full lg:w-1/3 mb-4 p-0">
                 <Image
-                  src={project.imagePath}
+                  src={
+                    project.imagePath
+                      ? project.imagePath
+                      : placeHolderPic
+                  }
                   alt={`Screenshot of ${project.title}`}
                   width={1920}
                   height={1080}
@@ -46,10 +51,10 @@ export default function Projects() {
                 />
               </CardHeader>
               <CardContent className="flex flex-col p-0 w-full lg:w-2/3">
-                <p className="text-primary font-bold">
+                <div className="text-primary font-bold">
                   {project.title}{" "}
                   <MoveUpRight className="ml-1 inline-block h-5 w-5 shrink-0 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 motion-reduce:transition-none" />
-                </p>
+                </div>
                 <CardDescription className="py-3 text-muted-foreground">
                   {project.description}
                 </CardDescription>
