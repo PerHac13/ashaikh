@@ -12,7 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { MoveUpRight, MoveRight } from "lucide-react";
 import { jobProjects } from "@/constants/jobProjects";
-import placeHolderPic from '@/public/placeholder-image.png'
+// import placeHolderPic from '@/public/placeholder-image.png'
 
 export default function Projects() {
     const router= useRouter();
@@ -41,7 +41,7 @@ export default function Projects() {
                   src={
                     project.imagePath
                       ? project.imagePath
-                      : placeHolderPic
+                      : '/projects/Placeholder.svg'
                   }
                   alt={`Screenshot of ${project.title}`}
                   width={1920}
