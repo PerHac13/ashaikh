@@ -6,7 +6,7 @@ export const jobPositions = [
         "previousPositions": [""],
         "description":[
           "Worked on the development of the company's website, to provide seamless and efficient user interaction with automation suite.",
-          "Integrated over 8 APIs, developed 4+ pages, and optimized workflow and speed by 30% through code refactoring."],
+          "Integrated over 20 APIs, developed 10+ pages, and optimized workflow and speed by 30% through code refactoring."],
         "skills": [
           "React",
           "CSS",
