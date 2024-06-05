@@ -1,21 +1,4 @@
 export const jobPositions = [
-    {
-        "timeline": "Mar 2024 - Present",
-        "currentPosition": "Frontend Developer - Internship",
-        "place": "BotGauge",
-        "previousPositions": [""],
-        "description":[
-          "Worked on the development of the company's website, to provide seamless and efficient user interaction with automation suite.",
-          "Integrated over 10 endpoints, developed 4+ pages, and optimized workflow and speed by 30% through code refactoring."],
-        "skills": [
-          "React",
-          "CSS",
-          "Redux",
-          "UI/UX",
-          "Automation",
-          "Scripting"
-        ]
-      },
       {
         "timeline": "Feb 2024 - Present",
         "currentPosition": "Open Source Lead",
@@ -36,5 +19,23 @@ export const jobPositions = [
             "Problem-Solving",
             "System documentation"   
         ]
-      }
+      },
+      {
+        "timeline": "Mar 2024 - Jun 2024",
+        "currentPosition": "Frontend Developer - Internship",
+        "place": "BotGauge",
+        "previousPositions": [""],
+        "description":[
+          "Worked on the development of the company's website, to provide seamless and efficient user interaction with automation suite.",
+          "Integrated over 10 endpoints, developed 4+ pages, and optimized workflow and speed by 30% through code refactoring."],
+        "skills": [
+          "React",
+          "CSS",
+          "Redux",
+          "UI/UX",
+          "Ant Design",
+          "Web Socket",
+          "Automation",
+        ]
+      },
 ]
