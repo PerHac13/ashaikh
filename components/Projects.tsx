@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -15,10 +15,10 @@ import { jobProjects } from "@/constants/jobProjects";
 // import placeHolderPic from '@/public/placeholder-image.png'
 
 export default function Projects() {
-    const router= useRouter();
-    const job = jobProjects.filter((item)=>item.featured===true);
-    
-    return (
+  const router = useRouter();
+  const job = jobProjects.filter((item) => item.featured === true);
+
+  return (
     <section id="projects" className="scroll-mt-16 lg:mt-16">
       <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-background/0 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
         <h2 className="text-sm font-bold uppercase tracking-widest lg:sr-only">
@@ -27,10 +27,11 @@ export default function Projects() {
       </div>
       <>
         {job.map((project, index) => (
-            
           <a
             key={index}
-            href={project.link ?? '#'}
+            href={
+              project.link && project.link.length > 0 ? project.link[0] : "#"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="hover:cursor-pointer"
@@ -41,7 +42,7 @@ export default function Projects() {
                   src={
                     project.imagePath
                       ? project.imagePath
-                      : '/projects/Placeholder.svg'
+                      : "/projects/Placeholder.svg"
                   }
                   alt={`Screenshot of ${project.title}`}
                   width={1920}
@@ -59,7 +60,7 @@ export default function Projects() {
                   {project.description}
                 </CardDescription>
                 <CardFooter className="p-0 flex flex-wrap gap-2">
-                {Array.isArray(project.skill)
+                  {Array.isArray(project.skill)
                     ? project.skill.map((skill, index) => (
                         <Badge key={index}>{skill}</Badge>
                       ))
@@ -73,7 +74,7 @@ export default function Projects() {
       <div className="lg:px-12 mt-12">
         <a
           className="inline-flex items-center font-medium leading-tight text-foreground group"
-          onClick={()=>router.push('/archive')}
+          onClick={() => router.push("/archive")}
         >
           <span className="border-b border-transparent pb-px transition hover:border-primary motion-reduce:transition-none">
             View Full Project Archive
@@ -82,5 +83,5 @@ export default function Projects() {
         </a>
       </div>
     </section>
-    );
+  );
 }
