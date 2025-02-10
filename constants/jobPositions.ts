@@ -1,6 +1,6 @@
 export const jobPositions = [
       {
-        "timeline": "Feb 2024 - Present",
+        "timeline": "Feb 2024 - Feb 2025",
         "currentPosition": "Open Source Lead",
         "place": "DevC (IIIT Bhagalpur)",
         "previousPositions": ["Core Team Member"],
