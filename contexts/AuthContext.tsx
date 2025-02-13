@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -40,12 +41,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
       localStorage.setItem("adminToken", data.token);
       setIsAuthenticated(true);
-      setIsLoading(false);
       router.push("/admin");
       return true;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error(error);
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
