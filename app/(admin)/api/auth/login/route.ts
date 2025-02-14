@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 // Simple in-memory rate limiting
-
 const rateLimit = new Map<string, { count: number; resetTime: number }>();
 
 const RATE_LIMIT = 5;
@@ -89,10 +89,24 @@ export async function POST(request: Request) {
       { expiresIn: "2h" }
     );
 
-    return NextResponse.json({
-      token,
-      message: "Login successful",
+    // Create the response
+    const response = NextResponse.json(
+      { message: "Login successful" },
+      { status: 200 }
+    );
+
+    // Set the cookie
+    cookies().set({
+      name: "auth-token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 2,
     });
+
+    return response;
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(
