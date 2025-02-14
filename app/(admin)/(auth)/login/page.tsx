@@ -51,8 +51,8 @@ export default function Login() {
           description: "Invalid credentials",
           variant: "destructive",
         });
-        usernameRef.current.value = "";
-        passwordRef.current.value = "";
+        if (usernameRef.current) usernameRef.current.value = "";
+        if (passwordRef.current) passwordRef.current.value = "";
       }
     } catch (error) {
       toast({
@@ -60,8 +60,8 @@ export default function Login() {
         description: "Something went wrong",
         variant: "destructive",
       });
-      usernameRef.current.value = "";
-      passwordRef.current.value = "";
+      if (usernameRef.current) usernameRef.current.value = "";
+      if (passwordRef.current) passwordRef.current.value = "";
     } finally {
       setIsLoading(false);
     }
