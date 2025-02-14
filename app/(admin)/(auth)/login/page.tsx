@@ -1,7 +1,6 @@
-// app/(admin)/admin/login/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,29 +14,45 @@ import { Label } from "@/components/ui/label";
 import { Lock, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function Login() {
   const { login } = useAuth();
-
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
   const [isLoading, setIsLoading] = useState(false);
+
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!usernameRef.current || !passwordRef.current) return;
+
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+
+    if (!username || !password) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const success = await login(formData.username, formData.password);
+      const success = await login(username, password);
       if (!success) {
         toast({
           title: "Error",
           description: "Invalid credentials",
           variant: "destructive",
         });
+        usernameRef.current.value = "";
+        passwordRef.current.value = "";
       }
     } catch (error) {
       toast({
@@ -45,6 +60,8 @@ export default function Login() {
         description: "Something went wrong",
         variant: "destructive",
       });
+      usernameRef.current.value = "";
+      passwordRef.current.value = "";
     } finally {
       setIsLoading(false);
     }
@@ -69,15 +86,12 @@ export default function Login() {
                 <User className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
                   id="username"
+                  ref={usernameRef}
                   placeholder="Enter your username"
                   className="pl-8"
-                  value={formData.username}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      username: e.target.value,
-                    }))
-                  }
+                  disabled={isLoading}
+                  autoComplete="username"
+                  required
                 />
               </div>
             </div>
@@ -87,23 +101,34 @@ export default function Login() {
                 <Lock className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
                   id="password"
+                  ref={passwordRef}
                   type="password"
                   placeholder="Enter your password"
                   className="pl-8"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      password: e.target.value,
-                    }))
-                  }
+                  disabled={isLoading}
+                  autoComplete="current-password"
+                  required
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading}
+              aria-busy={isLoading}
+            >
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
+          <Link href="/" className="w-full mt-5">
+            <Button
+              className="w-full mt-5"
+              disabled={isLoading}
+              aria-busy={isLoading}
+            >
+              Back to portfolio
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </div>
