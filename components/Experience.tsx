@@ -57,7 +57,7 @@ export default function Experience() {
       <div className="lg:px-12 mt-12">
         <a
           className="inline-flex items-center font-medium leading-tight text-foreground group"
-          href="/resume/Shaikh_Abdullah_Resume.pdf"
+          href="https://drive.google.com/file/d/1CDNWkrSOWpwmLAl0WmakDiCSXDPoW9JE/view?usp=sharing"
         >
           <span className="border-b border-transparent pb-px transition hover:border-primary motion-reduce:transition-none">
             View Full Resume
