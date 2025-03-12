@@ -1,116 +1,102 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
+import dbConnect from '@/lib/dbConnect';
+import User from '@/models/User';
+import Session from '@/models/Session';
+import { validateLogin } from '@/utils/validation';
+import logger from '@/utils/logger';
 
-// Simple in-memory rate limiting
-const rateLimit = new Map<string, { count: number; resetTime: number }>();
+// Cookie options
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  path: '/',
+} as const;
 
-const RATE_LIMIT = 5;
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000;
+const sessionCookieOptions = {
+  ...cookieOptions,
+  maxAge: 24 * 60 * 60 * 1000, // 24 hours
+};
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const userRateLimit = rateLimit.get(ip);
+export async function POST(request: NextRequest) {
+  await dbConnect();
+  logger.info('Login request received');
 
-  if (userRateLimit && now > userRateLimit.resetTime) {
-    rateLimit.delete(ip);
-  }
-
-  if (!userRateLimit) {
-    rateLimit.set(ip, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return true;
-  }
-
-  if (userRateLimit.count >= RATE_LIMIT) {
-    return false;
-  }
-
-  userRateLimit.count += 1;
-  return true;
-}
-
-export async function POST(request: Request) {
   try {
-    const ip = request.headers.get("x-forwarded-for") || "unknown";
-
-    if (!checkRateLimit(ip)) {
-      return NextResponse.json(
-        { message: "Too many login attempts. Please try again later." },
-        { status: 429 }
-      );
-    }
-
     const body = await request.json();
-
-    if (!body.username || !body.password) {
+    const validationResult = validateLogin(body);
+    
+    if (!validationResult.success) {
+      logger.warn('Validation error', validationResult.error.errors);
       return NextResponse.json(
-        { message: "Username and password are required" },
+        {
+          success: false,
+          message: validationResult.error.errors[0].message,
+        },
         { status: 400 }
       );
     }
 
-    const adminUsername = process.env.ADMIN_USERNAME;
-    const adminPasswordHash = process.env.ADMIN_PASSWORD;
+    const { username, password } = validationResult.data;
+    const user = await User.findOne({ username });
 
-    if (!adminUsername || !adminPasswordHash) {
-      console.error("Admin credentials not properly configured");
+    if (!user) {
+      logger.warn('User not found', username);
       return NextResponse.json(
-        { message: "Server configuration error" },
-        { status: 500 }
+        {
+          success: false,
+          message: 'Invalid credentials',
+        },
+        { status: 400 }
       );
     }
 
-    if (body.username !== adminUsername) {
+    const isValidPassword = await user.comparePassword(password);
+    if (!isValidPassword) {
+      logger.warn('Invalid password', username);
       return NextResponse.json(
-        { message: "Invalid credentials" },
-        { status: 401 }
+        {
+          success: false,
+          message: 'Invalid credentials',
+        },
+        { status: 400 }
       );
     }
 
-    const passwordMatch = await bcrypt.compare(
-      body.password,
-      adminPasswordHash
+    // Create a new session
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+    const ipAddress = request.ip || 'unknown';
+      const userId = user._id as mongoose.Types.ObjectId;
+    const session = await Session.createSession(
+      userId,
+      userAgent,
+      ipAddress,
+      24 * 60 * 60 * 1000 // 24 hours
     );
-    if (!passwordMatch) {
-      return NextResponse.json(
-        { message: "Invalid credentials" },
-        { status: 401 }
-      );
-    }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { username: body.username },
-      process.env.JWT_SECRET || "fallback-secret",
-      { expiresIn: "2h" }
-    );
-
-    // Create the response
+    // Create response with session cookie
     const response = NextResponse.json(
-      { message: "Login successful" },
+      {
+        success: true,
+        message: 'Login successful',
+        userId: user._id,
+      },
       { status: 200 }
     );
 
-    // Set the cookie
-    cookies().set({
-      name: "auth-token",
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 2,
-    });
+    // Set session cookie
+    response.cookies.set('sessionToken', session.token, sessionCookieOptions);
 
+    logger.info('Login successful', user._id);
     return response;
   } catch (error) {
-    console.error("Login error:", error);
+    logger.error('Login failed', error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      {
+        success: false,
+        message: 'Login failed',
+      },
       { status: 500 }
     );
   }
