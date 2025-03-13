@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -10,30 +10,66 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
+interface CacheData {
+  isAuthenticated: boolean;
+  timestamp: number;
+}
+
+const CACHE_DURATION = 3 * 60 * 1000;
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
+  
+  // Cache the last auth check
+  const [lastCheck, setLastCheck] = useState<CacheData | null>(null);
+
+  const checkAuth = async (forceCheck = false) => {
+    // If cache is available and not expired, use it
+    if (
+      !forceCheck && 
+      lastCheck && 
+      Date.now() - lastCheck.timestamp < CACHE_DURATION
+    ) {
+      setIsAuthenticated(lastCheck.isAuthenticated);
+      setIsLoading(false);
+      return;
+    }
+    
+    // Otherwise, fetch the authentication status
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/auth/check", {
+        credentials: "include",
+      });
+      
+      const authState = response.ok;
+      setIsAuthenticated(authState);
+      
+      // Update cache
+      setLastCheck({
+        isAuthenticated: authState,
+        timestamp: Date.now(),
+      });
+    } catch (error) {
+      console.error("Auth check failed:", error);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch("/api/auth/check", {
-          credentials: "include",
-        });
-        setIsAuthenticated(response.ok);
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     checkAuth();
   }, []);
+  
+  useEffect(() => {
+    checkAuth();
+  }, [pathname]);
 
   const login = async (username: string, password: string) => {
     try {
@@ -48,6 +84,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!response.ok) throw new Error("Login failed");
 
       setIsAuthenticated(true);
+      setLastCheck({
+        isAuthenticated: true,
+        timestamp: Date.now(),
+      });
+      
       router.push("/admin");
       return true;
     } catch (error) {
@@ -69,6 +110,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Logout failed:", error);
     } finally {
       setIsAuthenticated(false);
+      setLastCheck({
+        isAuthenticated: false,
+        timestamp: Date.now(),
+      });
+      
       setIsLoading(false);
       router.push("/login");
     }
