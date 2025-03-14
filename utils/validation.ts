@@ -90,6 +90,7 @@ const experienceWithEndDateSchema = experienceBaseSchema.extend({
     .date()
     .optional()
     .nullable()
+    .default(null)
     .refine((date) => {
       if (date && date <= new Date()) return true;
       return date === null;
