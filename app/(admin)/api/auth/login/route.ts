@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     // Create a new session
     const userAgent = request.headers.get('user-agent') || 'unknown';
-    const ipAddress = request.ip || 'unknown';
+    const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0] || 'unknown';
       const userId = user._id as mongoose.Types.ObjectId;
     const session = await Session.createSession(
       userId,
