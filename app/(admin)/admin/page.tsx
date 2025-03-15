@@ -78,14 +78,14 @@ export default function HomeDashboard() {
           </div>
         </div>
 
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <h2 className="text-lg font-semibold mb-4">Live Preview</h2>
           <iframe
             src="/"
             className="w-full h-[50rem] border rounded-lg shadow-sm"
             title="Live Preview"
           ></iframe>
-        </div>
+        </div> */}
 
         <div>
           <h2 className="text-lg font-semibold mb-4">
