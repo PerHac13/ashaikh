@@ -1,6 +1,7 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model } from "mongoose";
 
 export interface IExperience extends Document {
+  _id: string;
   startDate: Date;
   endDate?: Date;
   currentlyWorking: boolean;
@@ -8,25 +9,23 @@ export interface IExperience extends Document {
   organization: string;
   currentPosition: string;
   previousPositions: string[];
-  roleType: 'Full-time' | 'Part-time' | 'Contract' | 'Internship' | 'Freelance' | 'Temporary' | 'Remote' | 'Onsite' | 'Hybrid';
+  roleType: "Full-time" | "Part-time" | "Contract" | "Internship" | "Freelance" | "Temporary" | "Remote" | "Onsite" | "Hybrid";
   description: string[];
   skills: string[];
 }
 
-interface ExperienceModel extends Model<IExperience> {
-  // Add custom static methods here if needed
-}
+interface ExperienceModel extends Model<IExperience> {}
 
 export enum RoleType {
-  FullTime = 'Full-time',
-  PartTime = 'Part-time',
-  Contract = 'Contract',
-  Internship = 'Internship',
-  Freelance = 'Freelance',
-  Temporary = 'Temporary',
-  Remote = 'Remote',
-  Onsite = 'Onsite',
-  Hybrid = 'Hybrid',
+  FullTime = "Full-time",
+  PartTime = "Part-time",
+  Contract = "Contract",
+  Internship = "Internship",
+  Freelance = "Freelance",
+  Temporary = "Temporary",
+  Remote = "Remote",
+  Onsite = "Onsite",
+  Hybrid = "Hybrid",
 }
 
 const experienceSchema = new mongoose.Schema<IExperience>(
@@ -58,14 +57,16 @@ const experienceSchema = new mongoose.Schema<IExperience>(
     },
     previousPositions: {
       type: [String],
-      required: false,
       default: [],
     },
     roleType: {
       type: String,
       enum: Object.values(RoleType),
       required: true,
-      message: "Invalid role type",
+      validate: {
+        validator: (value: string) => Object.values(RoleType).includes(value as RoleType),
+        message: "Invalid role type",
+      },
     },
     description: {
       type: [String],
@@ -85,7 +86,14 @@ const experienceSchema = new mongoose.Schema<IExperience>(
 
 experienceSchema.index({ currentlyWorking: -1, startDate: -1, endDate: -1 });
 
-const Experience = (mongoose.models.Experience as ExperienceModel) || 
-  mongoose.model<IExperience, ExperienceModel>('Experience', experienceSchema);
+experienceSchema.pre("save", function (next) {
+  if (this.currentlyWorking && this.endDate) {
+    return next(new Error("End date must be null if currently working is true"));
+  }
+  next();
+});
+
+const Experience = (mongoose.models?.Experience as ExperienceModel) || 
+  mongoose.model<IExperience, ExperienceModel>("Experience", experienceSchema);
 
 export default Experience;
