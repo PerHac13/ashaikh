@@ -15,7 +15,7 @@ interface CacheData {
   timestamp: number;
 }
 
-const CACHE_DURATION = 3 * 60 * 1000;
+const CACHE_DURATION = 10 * 60 * 1000;
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
