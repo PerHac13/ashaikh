@@ -9,14 +9,14 @@ import { useRouter } from "next/navigation";
 export default function HomeDashboard() {
   const { logout } = useAuth();
   const router = useRouter();
-  const username = "Shaikh Abdullah"; // Replace with dynamic user data if available
+  const username = "Shaikh Abdullah";
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Admin Portal</h1>
+          <h1 className="text-2xl font-bold">Admin Portal</h1>
           <Button
             variant="outline"
             onClick={logout}
@@ -28,14 +28,15 @@ export default function HomeDashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <h1 className="text-2xl font-bold mb-8">
           Welcome Back, {username}!
         </h1>
+        
         {/* Action Center */}
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-4">Action Center</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -77,33 +78,25 @@ export default function HomeDashboard() {
             </Card>
           </div>
         </div>
-
-        {/* <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4">Live Preview</h2>
-          <iframe
-            src="/"
-            className="w-full h-[50rem] border rounded-lg shadow-sm"
-            title="Live Preview"
-          ></iframe>
-        </div> */}
-
-        <div>
-          <h2 className="text-lg font-semibold mb-4">
-            Analytics (future scope)
-          </h2>
-          <Card>
-            <CardContent className="flex items-center gap-4 p-6">
-              <LineChart className="h-10 w-10 text-blue-500" />
-              <p className="text-gray-600">
-                Monitor your site performance with Vercel Analytics.
-              </p>
-              <Button variant="outline" className="ml-auto">
-                View Analytics
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
       </main>
+
+      {/* Footer Analytics Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-auto w-full">
+        <h2 className="text-lg font-semibold mb-4">
+          Analytics (future scope)
+        </h2>
+        <Card>
+          <CardContent className="flex flex-col md:flex-row items-center gap-4 p-6">
+            <LineChart className="h-10 w-10 text-blue-500" />
+            <p className="text-gray-600 text-center md:text-left">
+              Monitor your site performance with Vercel Analytics.
+            </p>
+            <Button variant="outline" className="mt-4 md:mt-0 md:ml-auto">
+              View Analytics
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
