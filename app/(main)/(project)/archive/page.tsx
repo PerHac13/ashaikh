@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Inter } from "next/font/google";
 import { MoveLeft, MoveUpRight } from "lucide-react";
 import { jobProjects } from "@/constants/jobProjects";
 import ProjectModal from "@/components/ui/projectModal";
 import { Badge } from "@/components/ui/badge";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<any>(null);
