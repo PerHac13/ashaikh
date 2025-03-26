@@ -79,7 +79,7 @@ export default async function Experience() {
       )}
       <div className="lg:px-12 mt-12">
         <Link
-          href="https://drive.google.com/file/d/1CDNWkrSOWpwmLAl0WmakDiCSXDPoW9JE/view?usp=sharing"
+          href="/resume"
           className="inline-flex items-center font-medium leading-tight text-foreground group"
           target="_blank"
         >
