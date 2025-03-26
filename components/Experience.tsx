@@ -36,10 +36,17 @@ export default async function Experience() {
           >
             <CardHeader className="h-full w-full p-0">
               <CardTitle className="text-base text-slate-400 whitespace-nowrap">
-                {job.startDate && new Date(job.startDate).getFullYear()} -{" "}
+                {job.startDate &&
+                  `${new Date(job.startDate).toLocaleString("default", {
+                    month: "short",
+                  })} ${new Date(job.startDate).getFullYear()}`}{" "}
+                -{" "}
                 {job.currentlyWorking
                   ? "Present"
-                  : job.endDate && new Date(job.endDate).getFullYear()}
+                  : job.endDate &&
+                    `${new Date(job.endDate).toLocaleString("default", {
+                      month: "short",
+                    })} ${new Date(job.endDate).getFullYear()}`}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col p-0">
