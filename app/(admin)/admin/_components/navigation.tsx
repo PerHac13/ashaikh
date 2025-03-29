@@ -5,10 +5,11 @@ import {
   Home,
   Briefcase,
   Folder,
+  FileBadge,
   Settings,
   LogOut,
   MoveLeft,
-  X
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,7 +22,13 @@ interface SidebarItemProps {
   onItemClick?: () => void;
 }
 
-const SidebarItem = ({ name, icon, link, onClick, onItemClick }: SidebarItemProps) => {
+const SidebarItem = ({
+  name,
+  icon,
+  link,
+  onClick,
+  onItemClick,
+}: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const isActive = pathname === link;
@@ -60,7 +67,7 @@ interface NavigationProps {
 
 export const Navigation = ({ onItemClick }: NavigationProps) => {
   const { logout } = useAuth();
-  
+
   return (
     <aside className="h-full w-60 bg-secondary shadow-md flex flex-col justify-between p-4">
       <div className="flex justify-between items-center mb-6">
@@ -71,16 +78,22 @@ export const Navigation = ({ onItemClick }: NavigationProps) => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <SidebarItem 
-          name="Home" 
-          icon={<Home size={20} />} 
-          link="/admin" 
+        <SidebarItem
+          name="Home"
+          icon={<Home size={20} />}
+          link="/admin"
           onItemClick={onItemClick}
         />
         <SidebarItem
           name="Experience"
           icon={<Briefcase size={20} />}
           link="/admin/experience"
+          onItemClick={onItemClick}
+        />
+        <SidebarItem
+          name="Resume"
+          icon={<FileBadge size={20} />}
+          link="/admin/resume"
           onItemClick={onItemClick}
         />
         <SidebarItem
