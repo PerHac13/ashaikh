@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getActiveResumeLink } from "@/actions/resumeActions";
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,19 +10,26 @@ export async function GET(request: NextRequest) {
     if (link && link.url && !error) {
       return NextResponse.redirect(link.url, {
         headers: {
-          "Cache-Control": "public, max-age=3600, s-maxage=3600",
+          "Cache-Control": "no-store", // force no cache
         },
       });
     }
 
     const staticPdfPath =
       new URL(request.url).origin + "/resume/Shaikh_Abdullah_Resume.pdf";
-    return NextResponse.redirect(staticPdfPath);
+    return NextResponse.redirect(staticPdfPath, {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    });
   } catch (error) {
     console.error("Error in resume redirect:", error);
-
     const staticPdfPath =
       new URL(request.url).origin + "/resume/Shaikh_Abdullah_Resume.pdf";
-    return NextResponse.redirect(staticPdfPath);
+    return NextResponse.redirect(staticPdfPath, {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    });
   }
 }
