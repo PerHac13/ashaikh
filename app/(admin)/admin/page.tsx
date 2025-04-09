@@ -29,10 +29,8 @@ export default function HomeDashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-        <h1 className="text-2xl font-bold mb-8">
-          Welcome Back, {username}!
-        </h1>
-        
+        <h1 className="text-2xl font-bold mb-8">Welcome Back, {username}!</h1>
+
         {/* Action Center */}
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-4">Action Center</h2>
@@ -76,15 +74,32 @@ export default function HomeDashboard() {
                 </Button>
               </CardContent>
             </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Resume</CardTitle>
+                <Code className="h-5 w-5 text-gray-500" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Manage your active or ongoing resumes.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-2"
+                  onClick={() => router.push("/admin/resume")}
+                >
+                  View Projects
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
 
       {/* Footer Analytics Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-auto w-full">
-        <h2 className="text-lg font-semibold mb-4">
-          Analytics (future scope)
-        </h2>
+        <h2 className="text-lg font-semibold mb-4">Analytics (future scope)</h2>
         <Card>
           <CardContent className="flex flex-col md:flex-row items-center gap-4 p-6">
             <LineChart className="h-10 w-10 text-blue-500" />
