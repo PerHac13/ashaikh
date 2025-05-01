@@ -241,7 +241,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="imgUrl">Image Url</Label>
-            <Input id="imgURL" type="number" min="1" {...register("imgUrl")} />
+            <Input id="imgURL" {...register("imgUrl")} />
             {errors.imgUrl && (
               <p className="text-red-500 text-sm">{errors.imgUrl.message}</p>
             )}
