@@ -10,9 +10,32 @@ export async function getProjects() {
   await dbConnect();
 
   try {
-    const projects = await Project.find()
-      .sort({ featured: -1, createdAt: -1 })
-      .lean();
+    const projects = await Project.aggregate([
+      {
+        $addFields: {
+          sortDate: {
+            $cond: {
+              if: { $gt: ["$timeline.end", null] },
+              then: "$timeline.end",
+              else: "$timeline.start",
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          sortDate: -1,
+          featured: -1,
+          createdAt: -1,
+        },
+      },
+      {
+        $project: {
+          sortDate: 0,
+        },
+      },
+    ]);
+
     return { success: true, data: JSON.parse(JSON.stringify(projects)) };
   } catch (error) {
     logger.error("Failed to fetch projects:", error);
@@ -41,6 +64,14 @@ export async function createProject(projectData: Omit<IProject, "_id">) {
   await dbConnect();
 
   try {
+    const isAuthenticated = await auth();
+    if (!isAuthenticated) throw new Error("Unauthorized");
+
+    if (!projectData.imgUrl && projectData.githubUrl) {
+      const encodedUrl = encodeURIComponent(projectData.githubUrl);
+      projectData.imgUrl = `https://webapi.johnversus.dev/api/generateGithubSocial?repo_url=${encodedUrl}`;
+    }
+
     const project = new Project(projectData);
     await project.save();
     revalidatePath("/projects");
