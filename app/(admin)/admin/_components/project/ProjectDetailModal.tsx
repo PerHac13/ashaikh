@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +19,7 @@ import {
   Star,
 } from "lucide-react";
 import { format } from "date-fns";
+import Image from "next/image";
 
 interface ProjectDetailModalProps {
   project: IProject;
@@ -32,11 +32,10 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  // Format dates
   const startDate = new Date(project.timeline.start);
   const endDate = project.timeline.end ? new Date(project.timeline.end) : null;
 
-  const formatDate = (date: Date) => format(date, "MMMM d, yyyy");
+  const formatDate = (date: Date) => format(date, "MMMM, yyyy");
 
   const timelineText = endDate
     ? `${formatDate(startDate)} - ${formatDate(endDate)}`
@@ -65,20 +64,30 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </div>
         </DialogHeader>
 
-        <div className="space-y-6 mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                <span className="text-sm">{timelineText}</span>
-              </div>
-              <div className="flex items-center">
-                <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-                <span className="text-sm">Team Size: {project.teamSize}</span>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 items-start">
+          {project.imgUrl && (
+            <div className="w-full flex justify-center">
+              <Image
+                width={500}
+                height={300}
+                src={project.imgUrl}
+                alt={`${project.title} preview`}
+                className="w-full max-w-md rounded-md object-cover shadow-md"
+              />
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+              <span className="text-sm">{timelineText}</span>
+            </div>
+            <div className="flex items-center">
+              <Users className="h-4 w-4 mr-2 text-muted-foreground" />
+              <span className="text-sm">Team Size: {project.teamSize}</span>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 mt-2">
               {project.githubUrl && (
                 <Button variant="outline" size="sm" asChild>
                   <a
@@ -108,7 +117,9 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               )}
             </div>
           </div>
+        </div>
 
+        <div className="space-y-6 mt-6">
           <div>
             <h3 className="text-lg font-medium mb-2">Description</h3>
             {project.description.length > 0 ? (
@@ -128,12 +139,13 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             <div>
               <h3 className="text-lg font-medium mb-2">Skills</h3>
               <div className="flex flex-wrap gap-2">
-                {project.skills.map((skill, index) => (
-                  <Badge key={index} variant="outline">
-                    {skill}
-                  </Badge>
-                ))}
-                {project.skills.length === 0 && (
+                {project.skills.length > 0 ? (
+                  project.skills.map((skill, index) => (
+                    <Badge key={index} variant="outline">
+                      {skill}
+                    </Badge>
+                  ))
+                ) : (
                   <p className="text-muted-foreground italic">
                     No skills listed
                   </p>
@@ -144,12 +156,13 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             <div>
               <h3 className="text-lg font-medium mb-2">Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag, index) => (
-                  <Badge key={index} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-                {project.tags.length === 0 && (
+                {project.tags.length > 0 ? (
+                  project.tags.map((tag, index) => (
+                    <Badge key={index} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))
+                ) : (
                   <p className="text-muted-foreground italic">No tags listed</p>
                 )}
               </div>
