@@ -45,8 +45,10 @@ export default function Nav() {
         <h1 className="text-[45px] font-bold lg:text-start">
           <a href="/">Shaikh Abdullah</a>
         </h1>
-        <h2 className="text-xl lg:text-start">
-          Software Engineer, Programmer, Full Stack Developer
+        <h2 className="text-xl lg:text-start flex flex-wrap gap-2">
+          <span>Software Engineer,</span>
+          <span>Programmer,</span>
+          <span>Full Stack Developer</span>
         </h2>
         <p className="text-lg lg:text-start text-muted-foreground">
           I dabble in crafting solutions that not only manage to work—imagine
