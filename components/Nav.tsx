@@ -46,7 +46,7 @@ export default function Nav() {
           <a href="/">Shaikh Abdullah</a>
         </h1>
         <h2 className="text-xl lg:text-start">
-          Full Stack Developer, Programmer
+          Software Engineer, Programmer, Full Stack Developer
         </h2>
         <p className="text-lg lg:text-start text-muted-foreground">
           I dabble in crafting solutions that not only manage to work—imagine
