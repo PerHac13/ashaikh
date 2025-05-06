@@ -21,7 +21,7 @@ export default function Contact() {
       </div>
       <div className="flex flex-row justify-center items-center gap-4 lg:px-6 mb-4">
         <a
-          href="mailto:shaikh.2201027cs@iiitbh.ac.in"
+          href="mailto:shaikh_abdullah@myyahoo.com"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:cursor-pointer w-full"
