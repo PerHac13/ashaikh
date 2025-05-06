@@ -8,7 +8,7 @@ export default function About() {
       </div>
       <div className="flex flex-col gap-4">
         <p className="text-start text-muted-foreground lg:px-6">
-          As a Junior at the{" "}
+          As a Senior at the{" "}
           <span className="no-wrap text-primary dark:text-white">
             {" "}
             Indian Institute of Information Technology-Bhagalpur
