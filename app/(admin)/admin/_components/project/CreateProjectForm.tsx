@@ -59,10 +59,10 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
       githubUrl: projectToEdit?.githubUrl || "",
       liveUrl: projectToEdit?.liveUrl || "",
       timelineStart: projectToEdit?.timeline?.start
-        ? formatDateForInput(projectToEdit.timeline.start)
+        ? formatDateForInput(projectToEdit.timeline.start.toString())
         : formatDateForInput(new Date().toString()),
       timelineEnd: projectToEdit?.timeline?.end
-        ? formatDateForInput(projectToEdit.timeline.end)
+        ? formatDateForInput(projectToEdit.timeline.end.toString())
         : "",
     },
   });
