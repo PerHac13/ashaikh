@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 interface ProjectFileUploadSectionProps {
   onLinkGenerated: (url: string) => void;
@@ -105,7 +106,9 @@ const ProjectFileUploadSection: React.FC<ProjectFileUploadSectionProps> = ({
           <div>
             <Label className="text-sm font-medium">Preview:</Label>
             <div className="mt-2 flex justify-center">
-              <img
+              <Image
+                width={200}
+                height={200}
                 src={uploadedFileUrl}
                 alt="Project preview"
                 className="max-h-48 rounded-md object-contain border"
