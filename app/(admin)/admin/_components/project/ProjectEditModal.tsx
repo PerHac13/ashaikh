@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Project } from "@/types/project";
+import { IProject } from "@/types/project";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import ProjectFileUploadSection from "./ProjectFileUploadSection";
 import { useProjectActions } from "@/hooks/useProjectActions";
 
 interface ProjectEditModalProps {
-  project: Project;
+  project: IProject;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -25,9 +25,7 @@ const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [uploadedUrl, setUploadedUrl] = useState<string>(
-    project.imageUrl || ""
-  );
+  const [uploadedUrl, setUploadedUrl] = useState<string>(project.imgUrl || "");
   const { getProjects } = useProjectActions();
 
   const handleSuccess = async () => {
