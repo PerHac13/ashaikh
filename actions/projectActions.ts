@@ -76,6 +76,7 @@ export async function createProject(projectData: Omit<IProject, "_id">) {
     await project.save();
     revalidatePath("/projects");
     revalidatePath("/");
+    revalidatePath("/archive");
     return { success: true, data: JSON.parse(JSON.stringify(project)) };
   } catch (error) {
     logger.error("Failed to create project:", error);
@@ -102,6 +103,7 @@ export async function updateProject(
 
     revalidatePath("/projects");
     revalidatePath("/");
+    revalidatePath("/archive");
     return { success: true, data: JSON.parse(JSON.stringify(updatedProject)) };
   } catch (error) {
     logger.error(`Failed to update project with ID ${id}:`, error);
@@ -121,6 +123,7 @@ export async function deleteProject(id: string) {
 
     revalidatePath("/projects");
     revalidatePath("/");
+    revalidatePath("/archive");
     return { success: true };
   } catch (error) {
     logger.error(`Failed to delete project with ID ${id}:`, error);
