@@ -4,6 +4,7 @@ interface IResumeLink extends Document {
   name: string;
   url: string;
   isActive: boolean;
+  extractedText?: string;
   createdAt: Date;
 }
 
@@ -26,6 +27,10 @@ const resumeLinkSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: false,
+    },
+    extractedText: {
+      type: String,
+      required: false,
     },
     createdAt: {
       type: Date,

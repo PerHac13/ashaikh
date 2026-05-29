@@ -57,6 +57,18 @@ export async function createResumeLink(linkData: FormData) {
       url: result.data.url,
       isActive: false,
     });
+
+    try {
+      const { extractPdfText } = await import("@/utils/pdfExtractor");
+      const text = await extractPdfText(newLink.url);
+      if (text) {
+        newLink.extractedText = text;
+        await newLink.save();
+      }
+    } catch (err) {
+      logger.error("Failed to proactively cache resume text on creation:", err);
+    }
+
     revalidatePath("/resume");
     return { link: JSON.parse(JSON.stringify(newLink)) };
   } catch (error) {
@@ -88,12 +100,25 @@ export async function updateResumeLink(id: string, linkData: FormData) {
       {
         name: result.data.name,
         url: result.data.url,
+        $unset: { extractedText: "" }
       },
       { new: true }
     );
     if (!updatedLink) {
       return { error: "Resume link not found" };
     }
+
+    try {
+      const { extractPdfText } = await import("@/utils/pdfExtractor");
+      const text = await extractPdfText(updatedLink.url);
+      if (text) {
+        updatedLink.extractedText = text;
+        await updatedLink.save();
+      }
+    } catch (err) {
+      logger.error("Failed to proactively cache resume text on update:", err);
+    }
+
     revalidatePath("/resume");
     return { link: JSON.parse(JSON.stringify(updatedLink)) };
   } catch (error) {
@@ -135,6 +160,17 @@ export async function setActiveResumeLink(id: string) {
     );
     if (!activatedLink) {
       return { error: "Resume link not found" };
+    }
+
+    try {
+      const { extractPdfText } = await import("@/utils/pdfExtractor");
+      const text = await extractPdfText(activatedLink.url);
+      if (text) {
+        activatedLink.extractedText = text;
+        await activatedLink.save();
+      }
+    } catch (err) {
+      logger.error("Failed to proactively cache active resume PDF text:", err);
     }
 
     revalidatePath("/resume");
