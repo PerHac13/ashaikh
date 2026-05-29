@@ -8,12 +8,12 @@ export default function About() {
       </div>
       <div className="flex flex-col gap-4">
         <p className="text-start text-muted-foreground lg:px-6">
-          As a Senior at the{" "}
+          Having graduated from the{" "}
           <span className="no-wrap text-primary dark:text-white">
             {" "}
             Indian Institute of Information Technology-Bhagalpur
           </span>
-          , currently pursuing a B.Tech in{" "}
+          , with a B.Tech in{" "}
           <span className="no-wrap text-primary dark:text-white">
             {" "}
             Computer Science and Engineering
@@ -33,9 +33,11 @@ export default function About() {
           marveled at the complexity of printing &quot;Hello World&quot; in C.
           Who needs Shakespeare when you&apos;ve got this timeless masterpiece
           echoing through the command line? Since then, I&apos;ve traversed a
-          path of continuous learning and exploration, understanding that
-          development is more than just a code—it&apos;s a harmonious blend of
-          practice, discipline, and unwavering dedication to core principles.
+          path of continuous learning and exploration. Even in this chaotic
+          world of tech, I still believe that learning and teaching are continuous
+          things that drive us forward, understanding that development is more than
+          just code—it&apos;s a harmonious blend of practice, discipline, and
+          unwavering dedication to core principles.
         </p>
         <p className="text-start text-muted-foreground lg:px-6">
           Outside of work, I&#39;m an avid reader, an amateur writer, can say

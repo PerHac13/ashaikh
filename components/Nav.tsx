@@ -31,11 +31,10 @@ export default function Nav() {
     const isActive = activeSection === href.substring(1);
     return {
       idClass: isActive ? "active" : "",
-      textClass: `nav-text text-xs font-bold uppercase tracking-widest ${
-        isActive
-          ? "text-foreground"
-          : "text-slate-500 group-hover:text-foreground"
-      }`,
+      textClass: `nav-text text-xs font-bold uppercase tracking-widest ${isActive
+        ? "text-foreground"
+        : "text-slate-500 group-hover:text-foreground"
+        }`,
     };
   };
 
@@ -47,13 +46,12 @@ export default function Nav() {
         </h1>
         <h2 className="text-xl lg:text-start flex flex-wrap gap-2">
           <span>Software Engineer,</span>
-          <span>Programmer,</span>
+          {/* <span>Programmer,</span> */}
           <span>Full Stack Developer</span>
         </h2>
         <p className="text-lg lg:text-start text-muted-foreground">
-          I dabble in crafting solutions that not only manage to work—imagine
-          that!—but also happen to look halfway decent and are, dare I say,
-          somewhat intuitive to use.
+          I believe engineering is a continuous journey of reading, relentless
+          learning, and translating complex ideas into elegant, impactful solutions.
         </p>
       </div>
       <nav className="lg:flex hidden">
