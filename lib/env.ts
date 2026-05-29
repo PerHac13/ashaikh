@@ -6,6 +6,7 @@ const envSchema = zod.object({
   MONGODB_URI: zod.string(),
   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: zod.string(),
   NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: zod.string(),
+  GEMINI_API_KEY: zod.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);
