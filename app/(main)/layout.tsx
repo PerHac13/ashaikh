@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "@/components/ui/toaster";
 import ChatBot from "@/components/ChatBot";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,10 +26,11 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}
+          <AnalyticsTracker />
           <Toaster />
           <ChatBot />
           <Analytics />

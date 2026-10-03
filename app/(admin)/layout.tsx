@@ -27,7 +27,7 @@ export default function AdminRootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           <AuthProvider>{children}</AuthProvider>
