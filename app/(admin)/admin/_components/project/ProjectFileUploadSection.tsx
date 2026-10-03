@@ -36,16 +36,26 @@ const ProjectFileUploadSection: React.FC<ProjectFileUploadSectionProps> = ({
 
     setIsUploading(true);
 
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+    if (!cloudName || !uploadPreset) {
+      toast({
+        title: "Configuration error",
+        description: "Cloudinary cloud name or upload preset is missing.",
+        variant: "destructive",
+      });
+      setIsUploading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
-    );
+    formData.append("upload_preset", uploadPreset);
 
     try {
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
         {
           method: "POST",
           body: formData,
@@ -53,6 +63,10 @@ const ProjectFileUploadSection: React.FC<ProjectFileUploadSectionProps> = ({
       );
 
       const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error?.message || "Failed to upload image to Cloudinary");
+      }
 
       if (data.secure_url) {
         setUploadedFileUrl(data.secure_url);
@@ -63,10 +77,10 @@ const ProjectFileUploadSection: React.FC<ProjectFileUploadSectionProps> = ({
           variant: "success",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Upload failed",
-        description: "Failed to upload your image",
+        description: error?.message || "Failed to upload your image",
         variant: "destructive",
       });
     } finally {

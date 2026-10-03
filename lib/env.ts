@@ -4,8 +4,8 @@ const envSchema = zod.object({
   // PORT: zod.number().default(3000),
   NODE_ENV: zod.string().default("development"),
   MONGODB_URI: zod.string(),
-  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: zod.string(),
-  NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: zod.string(),
+  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: zod.string().optional().default(""),
+  NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: zod.string().optional().default(""),
   GEMINI_API_KEY: zod.string().optional(),
 });
 
