@@ -28,30 +28,35 @@ export default function ExperienceDetailModal({ experience, onClose }: Experienc
     onClose();
   };
 
+  if (isEditing) {
+    return (
+      <ExperienceForm 
+        initialData={experience} 
+        open={true} 
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsEditing(false);
+            onClose();
+          }
+        }}
+        onSuccess={handleEditSuccess} 
+      />
+    );
+  }
+
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Experience" : "Experience Details"}</DialogTitle>
+          <DialogTitle>Experience Details</DialogTitle>
         </DialogHeader>
 
-        {isEditing ? (
-          <ExperienceForm 
-            initialData={experience} 
-            open={true} 
-            onOpenChange={(open) => {
-              if (!open) setIsEditing(false);
-            }}
-            onSuccess={handleEditSuccess} 
-          />
-        ) : (
-          <ExperienceDetails 
-            experience={experience} 
-            onEdit={() => setIsEditing(true)} 
-            onDelete={handleDelete} 
-            isDeleting={isDeleting} 
-          />
-        )}
+        <ExperienceDetails 
+          experience={experience} 
+          onEdit={() => setIsEditing(true)} 
+          onDelete={handleDelete} 
+          isDeleting={isDeleting} 
+        />
       </DialogContent>
     </Dialog>
   );

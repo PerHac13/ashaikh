@@ -35,7 +35,7 @@ const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[750px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Project: {project.title}</DialogTitle>
           <DialogDescription>

@@ -74,7 +74,7 @@ const ProjectPage: React.FC = () => {
           <DialogTrigger asChild>
             <Button>Create Project</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[700px]">
+          <DialogContent className="sm:max-w-[750px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create a new project</DialogTitle>
               <DialogDescription>
