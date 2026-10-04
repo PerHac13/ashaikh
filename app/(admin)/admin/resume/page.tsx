@@ -17,11 +17,13 @@ import { Loader2 } from "lucide-react";
 import CreateResumeLinkForm from "../_components/resume/CreateResumeLinkForm";
 import FileUploadSection from "../_components/resume/FileUploadSection";
 import ResumeLinksList from "../_components/resume/ResumeLinksList";
+import EditResumeModal from "../_components/resume/EditResumeModal";
 import { ResumeLink, UseResumeLinkActionsReturn } from "@/types/resume";
 
 const ResumePage: React.FC = () => {
   const [links, setLinks] = useState<ResumeLink[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [editingResume, setEditingResume] = useState<ResumeLink | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string>("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [setActiveId, setSetActiveId] = useState<string | null>(null);
@@ -67,14 +69,19 @@ const ResumePage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Resume Management</h1>
+    <div className="container mx-auto py-8 px-4 max-w-6xl">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">Resume Management</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Manage multi-resume share links, active resume, and direct files
+          </p>
+        </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>Create Resume Link</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[700px]">
+          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create a new resume link</DialogTitle>
               <DialogDescription>
@@ -105,14 +112,24 @@ const ResumePage: React.FC = () => {
         </Dialog>
       </div>
 
+      {editingResume && (
+        <EditResumeModal
+          resume={editingResume}
+          isOpen={!!editingResume}
+          onClose={() => setEditingResume(null)}
+          onSuccess={fetchLinks}
+        />
+      )}
+
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Loading resume links...</span>
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2 text-muted-foreground">Loading resume links...</span>
         </div>
       ) : (
         <ResumeLinksList
           links={links}
+          onEdit={(resume) => setEditingResume(resume)}
           onDelete={handleDelete}
           onSetActive={handleSetActive}
           isDeleting={deleteId}

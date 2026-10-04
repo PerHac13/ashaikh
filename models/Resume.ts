@@ -3,6 +3,7 @@ import mongoose, { Document, Model } from "mongoose";
 interface IResumeLink extends Document {
   name: string;
   url: string;
+  slug?: string;
   isActive: boolean;
   extractedText?: string;
   createdAt: Date;
@@ -23,6 +24,12 @@ const resumeLinkSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    slug: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      default: "",
     },
     isActive: {
       type: Boolean,

@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getActiveResumeLink } from "@/actions/resumeActions";
+import { recordAnalyticsEvent } from "@/actions/trackingActions";
 
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
+    // Asynchronously record resume view event
+    recordAnalyticsEvent({
+      path: "/resume",
+      eventType: "resume_view",
+      identifier: "default",
+    }).catch(() => {});
+
     const { link, error } = await getActiveResumeLink();
 
     if (link && link.url && !error) {

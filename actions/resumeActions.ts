@@ -34,6 +34,34 @@ export async function getActiveResumeLink() {
   }
 }
 
+export async function getResumeLinkBySlugOrId(slugOrId: string) {
+  try {
+    await dbConnect();
+
+    const cleanSlug = slugOrId.trim().toLowerCase();
+    let link = null;
+
+    if (mongoose.Types.ObjectId.isValid(slugOrId) && slugOrId.length === 24) {
+      link = await ResumeLink.findById(slugOrId);
+    }
+
+    if (!link) {
+      link = await ResumeLink.findOne({ slug: cleanSlug });
+    }
+
+    if (!link) {
+      link = await ResumeLink.findOne({
+        name: { $regex: new RegExp(`^${cleanSlug}$`, "i") },
+      });
+    }
+
+    return { link: link ? JSON.parse(JSON.stringify(link)) : null };
+  } catch (error) {
+    logger.error(`Failed to fetch resume link for ${slugOrId}:`, error);
+    return { error: "Failed to fetch resume link" };
+  }
+}
+
 export async function createResumeLink(linkData: FormData) {
   try {
     await dbConnect();
@@ -45,8 +73,16 @@ export async function createResumeLink(linkData: FormData) {
 
     const name = linkData.get("name")?.toString();
     const url = linkData.get("url")?.toString();
+    let slug = linkData.get("slug")?.toString()?.trim().toLowerCase();
 
-    const result = await resumeLinkSchema.safeParse({ name, url });
+    if (!slug && name) {
+      slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, "");
+    }
+
+    const result = await resumeLinkSchema.safeParse({ name, url, slug });
     if (!result.success) {
       logger.error("Invalid resume link data:", result.error);
       return { error: "Invalid resume link data" };
@@ -55,6 +91,7 @@ export async function createResumeLink(linkData: FormData) {
     const newLink = await ResumeLink.create({
       name: result.data.name,
       url: result.data.url,
+      slug: result.data.slug || slug,
       isActive: false,
     });
 
@@ -88,8 +125,16 @@ export async function updateResumeLink(id: string, linkData: FormData) {
 
     const name = linkData.get("name")?.toString();
     const url = linkData.get("url")?.toString();
+    let slug = linkData.get("slug")?.toString()?.trim().toLowerCase();
 
-    const result = await resumeLinkSchema.safeParse({ name, url });
+    if (!slug && name) {
+      slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, "");
+    }
+
+    const result = await resumeLinkSchema.safeParse({ name, url, slug });
     if (!result.success) {
       logger.error("Invalid resume link data:", result.error);
       return { error: "Invalid resume link data" };
@@ -100,7 +145,8 @@ export async function updateResumeLink(id: string, linkData: FormData) {
       {
         name: result.data.name,
         url: result.data.url,
-        $unset: { extractedText: "" }
+        slug: result.data.slug || slug,
+        $unset: { extractedText: "" },
       },
       { new: true }
     );

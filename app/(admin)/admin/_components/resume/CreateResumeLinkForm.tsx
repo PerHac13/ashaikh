@@ -20,6 +20,7 @@ const CreateResumeLinkForm: React.FC<CreateResumeLinkFormProps> = ({
   const { createResumeLink, isSubmitting } = useResumeLinkActions();
   const [formData, setFormData] = useState<FormDataType>({
     name: "",
+    slug: "",
     url: initialUrl,
   });
 
@@ -35,11 +36,12 @@ const CreateResumeLinkForm: React.FC<CreateResumeLinkFormProps> = ({
 
     const form = new FormData();
     form.append("name", formData.name);
+    form.append("slug", formData.slug || "");
     form.append("url", formData.url);
 
     const result = await createResumeLink(form);
     if (result) {
-      setFormData({ name: "", url: "" });
+      setFormData({ name: "", slug: "", url: "" });
       onSuccess();
     }
   };
@@ -51,10 +53,39 @@ const CreateResumeLinkForm: React.FC<CreateResumeLinkFormProps> = ({
         <Input
           id="name"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={(e) => {
+            const name = e.target.value;
+            setFormData((prev) => ({
+              ...prev,
+              name,
+              slug: prev.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, ""),
+            }));
+          }}
           placeholder="e.g. Software Developer Resume"
           required
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="slug">Custom Share Slug / Identifier (Optional)</Label>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground font-mono">/resume/</span>
+          <Input
+            id="slug"
+            value={formData.slug}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                slug: e.target.value.toLowerCase().replace(/\s+/g, "-"),
+              })
+            }
+            placeholder="software"
+            className="font-mono text-sm"
+          />
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Allows sharing via <span className="font-mono">/resume/{formData.slug || "your-slug"}</span> (or /resume/1)
+        </p>
       </div>
 
       <div className="space-y-2">
