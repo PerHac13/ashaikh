@@ -6,6 +6,9 @@ import {
   Briefcase,
   Folder,
   FileBadge,
+  Trophy,
+  BookOpen,
+  BarChart3,
   Settings,
   LogOut,
   MoveLeft,
@@ -31,7 +34,7 @@ const SidebarItem = ({
 }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const isActive = pathname === link;
+  const isActive = pathname === link || (link && link !== "/admin" && pathname.startsWith(link));
 
   const handleClick = () => {
     if (onClick) {
@@ -77,7 +80,7 @@ export const Navigation = ({ onItemClick }: NavigationProps) => {
         </button>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 overflow-y-auto">
         <SidebarItem
           name="Home"
           icon={<Home size={20} />}
@@ -91,15 +94,33 @@ export const Navigation = ({ onItemClick }: NavigationProps) => {
           onItemClick={onItemClick}
         />
         <SidebarItem
+          name="Projects"
+          icon={<Folder size={20} />}
+          link="/admin/project"
+          onItemClick={onItemClick}
+        />
+        <SidebarItem
           name="Resume"
           icon={<FileBadge size={20} />}
           link="/admin/resume"
           onItemClick={onItemClick}
         />
         <SidebarItem
-          name="Projects"
-          icon={<Folder size={20} />}
-          link="/admin/project"
+          name="Achievements"
+          icon={<Trophy size={20} />}
+          link="/admin/achievement"
+          onItemClick={onItemClick}
+        />
+        <SidebarItem
+          name="Blogs"
+          icon={<BookOpen size={20} />}
+          link="/admin/blog"
+          onItemClick={onItemClick}
+        />
+        <SidebarItem
+          name="Analytics"
+          icon={<BarChart3 size={20} />}
+          link="/admin/analytics"
           onItemClick={onItemClick}
         />
       </div>

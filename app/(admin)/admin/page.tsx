@@ -3,7 +3,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { Briefcase, Code, LineChart } from "lucide-react";
+import {
+  Briefcase,
+  Folder,
+  FileBadge,
+  Trophy,
+  BookOpen,
+  LineChart,
+  BarChart3,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function HomeDashboard() {
@@ -34,24 +42,24 @@ export default function HomeDashboard() {
         {/* Action Center */}
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-4">Action Center</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
                   Experience
                 </CardTitle>
-                <Briefcase className="h-5 w-5 text-gray-500" />
+                <Briefcase className="h-5 w-5 text-emerald-500" />
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
-                  Explore your work history and contributions.
+                <p className="text-gray-600 dark:text-gray-400">
+                  Manage your work history and positions.
                 </p>
                 <Button
                   variant="outline"
-                  className="mt-2"
+                  className="mt-4 w-full"
                   onClick={() => router.push("/admin/experience")}
                 >
-                  View Experience
+                  Manage Experience
                 </Button>
               </CardContent>
             </Card>
@@ -59,18 +67,18 @@ export default function HomeDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Projects</CardTitle>
-                <Code className="h-5 w-5 text-gray-500" />
+                <Folder className="h-5 w-5 text-blue-500" />
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   Manage your ongoing and completed projects.
                 </p>
                 <Button
                   variant="outline"
-                  className="mt-2"
+                  className="mt-4 w-full"
                   onClick={() => router.push("/admin/project")}
                 >
-                  View Projects
+                  Manage Projects
                 </Button>
               </CardContent>
             </Card>
@@ -78,18 +86,75 @@ export default function HomeDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Resume</CardTitle>
-                <Code className="h-5 w-5 text-gray-500" />
+                <FileBadge className="h-5 w-5 text-purple-500" />
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
-                  Manage your active or ongoing resumes.
+                <p className="text-gray-600 dark:text-gray-400">
+                  Manage active resumes and multi-share links.
                 </p>
                 <Button
                   variant="outline"
-                  className="mt-2"
+                  className="mt-4 w-full"
                   onClick={() => router.push("/admin/resume")}
                 >
-                  View Projects
+                  Manage Resumes
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Achievements</CardTitle>
+                <Trophy className="h-5 w-5 text-amber-500" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Showcase awards, hackathons, and certifications.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full"
+                  onClick={() => router.push("/admin/achievement")}
+                >
+                  Manage Achievements
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Blogs & Series</CardTitle>
+                <BookOpen className="h-5 w-5 text-indigo-500" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Publish articles, manage blog series & redirect links.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full"
+                  onClick={() => router.push("/admin/blog")}
+                >
+                  Manage Blogs
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Analytics</CardTitle>
+                <BarChart3 className="h-5 w-5 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-400">
+                  View portfolio metrics, breakdowns, and stats.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full"
+                  onClick={() => router.push("/admin/analytics")}
+                >
+                  View Analytics
                 </Button>
               </CardContent>
             </Card>
@@ -99,15 +164,19 @@ export default function HomeDashboard() {
 
       {/* Footer Analytics Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-auto w-full">
-        <h2 className="text-lg font-semibold mb-4">Analytics (future scope)</h2>
+        <h2 className="text-lg font-semibold mb-4">Portfolio Analytics & Insights</h2>
         <Card>
           <CardContent className="flex flex-col md:flex-row items-center gap-4 p-6">
-            <LineChart className="h-10 w-10 text-blue-500" />
-            <p className="text-gray-600 text-center md:text-left">
-              Monitor your site performance with Vercel Analytics.
+            <LineChart className="h-10 w-10 text-blue-500 shrink-0" />
+            <p className="text-gray-600 dark:text-gray-400 text-center md:text-left">
+              Explore content distribution, project statuses, series metrics, and site insights.
             </p>
-            <Button variant="outline" className="mt-4 md:mt-0 md:ml-auto">
-              View Analytics
+            <Button
+              variant="default"
+              className="mt-4 md:mt-0 md:ml-auto shrink-0"
+              onClick={() => router.push("/admin/analytics")}
+            >
+              Open Analytics Dashboard
             </Button>
           </CardContent>
         </Card>
