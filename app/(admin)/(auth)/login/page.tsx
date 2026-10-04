@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Lock, User } from "lucide-react";
+import { Lock, User, Eye, EyeOff, Loader2, ArrowLeft, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
@@ -20,22 +20,28 @@ export default function Login() {
   const { login } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
 
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!usernameRef.current || !passwordRef.current) return;
+    const { username, password } = credentials;
 
-    const username = usernameRef.current.value;
-    const password = passwordRef.current.value;
-
-    if (!username || !password) {
+    if (!username.trim() || !password.trim()) {
       toast({
-        title: "Error",
-        description: "Please fill in all fields",
+        title: "Missing credentials",
+        description: "Please enter both username and password.",
         variant: "destructive",
       });
       return;
@@ -44,91 +50,125 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const success = await login(username, password);
+      const success = await login(username.trim(), password);
       if (!success) {
         toast({
-          title: "Error",
-          description: "Invalid credentials",
+          title: "Authentication Failed",
+          description: "Invalid username or password.",
           variant: "destructive",
         });
-        if (usernameRef.current) usernameRef.current.value = "";
-        if (passwordRef.current) passwordRef.current.value = "";
+        setCredentials((prev) => ({ ...prev, password: "" }));
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
-        description: "Something went wrong",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-      if (usernameRef.current) usernameRef.current.value = "";
-      if (passwordRef.current) passwordRef.current.value = "";
+      setCredentials((prev) => ({ ...prev, password: "" }));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[rgb(30_58_138)/0.7]">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Admin Login
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground relative overflow-hidden">
+      {/* Subtle background ambient blur */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+
+      <Card className="w-full max-w-md border border-border/80 bg-card/90 backdrop-blur-md shadow-2xl relative z-10">
+        <CardHeader className="space-y-2 text-center pb-4">
+          <div className="mx-auto w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-1">
+            <Shield className="w-5 h-5" />
+          </div>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            Admin Portal
           </CardTitle>
-          <CardDescription className="text-center">
-            Enter your credentials to access the admin portal
+          <CardDescription>
+            Enter credentials to manage your portfolio and content
           </CardDescription>
         </CardHeader>
-        <CardContent>
+
+        <CardContent className="space-y-5">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <div className="relative">
-                <User className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="username"
-                  ref={usernameRef}
+                  name="username"
+                  value={credentials.username}
+                  onChange={handleChange}
                   placeholder="Enter your username"
-                  className="pl-8"
+                  className="pl-9"
                   disabled={isLoading}
                   autoComplete="username"
                   required
                 />
               </div>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
-                  ref={passwordRef}
-                  type="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={credentials.password}
+                  onChange={handleChange}
                   placeholder="Enter your password"
-                  className="pl-8"
+                  className="pl-9 pr-10"
                   disabled={isLoading}
                   autoComplete="current-password"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
               </div>
             </div>
+
             <Button
               type="submit"
-              className="w-full"
+              className="w-full mt-2"
               disabled={isLoading}
               aria-busy={isLoading}
             >
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Authenticating...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
-          <Link href="/" className="w-full mt-5">
+
+          <div className="pt-2 border-t text-center">
             <Button
-              className="w-full mt-5"
-              disabled={isLoading}
-              aria-busy={isLoading}
+              asChild
+              variant="ghost"
+              className="w-full text-muted-foreground hover:text-foreground text-sm"
             >
-              Back to portfolio
+              <Link href="/" className="inline-flex items-center justify-center gap-1.5">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Portfolio
+              </Link>
             </Button>
-          </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
