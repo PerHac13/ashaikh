@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import {
   getAchievements as getAchievementsAction,
@@ -16,120 +16,132 @@ export function useAchievementActions() {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const getAchievements = async (filter?: { featured?: boolean }) => {
-    setIsLoading(true);
-    try {
-      const res = await getAchievementsAction(filter);
-      if (!res.success) {
+  const getAchievements = useCallback(
+    async (filter?: { featured?: boolean }) => {
+      setIsLoading(true);
+      try {
+        const res = await getAchievementsAction(filter);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to fetch achievements",
+            variant: "destructive",
+          });
+          return [];
+        }
+        return res.data || [];
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to fetch achievements",
+          description: err?.message || "Failed to fetch achievements",
           variant: "destructive",
         });
         return [];
+      } finally {
+        setIsLoading(false);
       }
-      return res.data || [];
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to fetch achievements",
-        variant: "destructive",
-      });
-      return [];
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [toast]
+  );
 
-  const createAchievement = async (data: Partial<IAchievement>) => {
-    setIsSubmitting(true);
-    try {
-      const res = await createAchievementAction(data);
-      if (!res.success) {
+  const createAchievement = useCallback(
+    async (data: Partial<IAchievement>) => {
+      setIsSubmitting(true);
+      try {
+        const res = await createAchievementAction(data);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to create achievement",
+            variant: "destructive",
+          });
+          return false;
+        }
+        toast({
+          title: "Achievement created",
+          description: "Achievement has been created successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to create achievement",
+          description: err?.message || "Failed to create achievement",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsSubmitting(false);
       }
-      toast({
-        title: "Achievement created",
-        description: "Achievement has been created successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to create achievement",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+    [toast]
+  );
 
-  const updateAchievement = async (id: string, data: Partial<IAchievement>) => {
-    setIsSubmitting(true);
-    try {
-      const res = await updateAchievementAction(id, data);
-      if (!res.success) {
+  const updateAchievement = useCallback(
+    async (id: string, data: Partial<IAchievement>) => {
+      setIsSubmitting(true);
+      try {
+        const res = await updateAchievementAction(id, data);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to update achievement",
+            variant: "destructive",
+          });
+          return false;
+        }
+        toast({
+          title: "Achievement updated",
+          description: "Achievement has been updated successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to update achievement",
+          description: err?.message || "Failed to update achievement",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsSubmitting(false);
       }
-      toast({
-        title: "Achievement updated",
-        description: "Achievement has been updated successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to update achievement",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+    [toast]
+  );
 
-  const deleteAchievement = async (id: string) => {
-    setIsDeleting(id);
-    try {
-      const res = await deleteAchievementAction(id);
-      if (!res.success) {
+  const deleteAchievement = useCallback(
+    async (id: string) => {
+      setIsDeleting(id);
+      try {
+        const res = await deleteAchievementAction(id);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to delete achievement",
+            variant: "destructive",
+          });
+          return false;
+        }
+        toast({
+          title: "Achievement deleted",
+          description: "Achievement has been deleted successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to delete achievement",
+          description: err?.message || "Failed to delete achievement",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsDeleting(null);
       }
-      toast({
-        title: "Achievement deleted",
-        description: "Achievement has been deleted successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to delete achievement",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsDeleting(null);
-    }
-  };
+    },
+    [toast]
+  );
 
   return {
     getAchievements,

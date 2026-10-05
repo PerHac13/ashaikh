@@ -11,16 +11,18 @@ import { Card } from "@/components/ui/card";
 
 export default function AdminAchievementPage() {
   const [achievements, setAchievements] = useState<IAchievement[]>([]);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingAchievement, setEditingAchievement] =
     useState<IAchievement | null>(null);
 
-  const { getAchievements, deleteAchievement, isLoading, isDeleting } =
+  const { getAchievements, deleteAchievement, isDeleting } =
     useAchievementActions();
 
   const fetchAchievements = useCallback(async () => {
     const data = await getAchievements();
     setAchievements(data || []);
+    setInitialLoading(false);
   }, [getAchievements]);
 
   useEffect(() => {
@@ -77,7 +79,7 @@ export default function AdminAchievementPage() {
         onSuccess={fetchAchievements}
       />
 
-      {isLoading ? (
+      {initialLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <span className="ml-2 text-muted-foreground">

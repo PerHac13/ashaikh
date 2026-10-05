@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { IProject } from "@/models/Project";
 import {
@@ -16,7 +16,7 @@ export function useProjectActions() {
   const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
 
-  const handleGetProjects = async () => {
+  const handleGetProjects = useCallback(async () => {
     setIsLoading(true);
     try {
       const result = await getProjects();
@@ -32,76 +32,85 @@ export function useProjectActions() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
-  const handleCreateProject = async (data: Omit<IProject, "_id">) => {
-    setIsSubmitting(true);
-    try {
-      const result = await createProject(data);
-      toast({
-        title: "Project created",
-        description: "Your project has been created successfully.",
-        variant: "success",
-      });
-      return result.data;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to create project",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const handleCreateProject = useCallback(
+    async (data: Omit<IProject, "_id">) => {
+      setIsSubmitting(true);
+      try {
+        const result = await createProject(data);
+        toast({
+          title: "Project created",
+          description: "Your project has been created successfully.",
+          variant: "success",
+        });
+        return result.data;
+      } catch (error) {
+        toast({
+          title: "Error",
+          description:
+            error instanceof Error ? error.message : "Failed to create project",
+          variant: "destructive",
+        });
+        return null;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [toast]
+  );
 
-  const handleUpdateProject = async (id: string, data: Partial<IProject>) => {
-    setIsSubmitting(true);
-    try {
-      const result = await updateProjectAction(id, data);
-      toast({
-        title: "Project updated",
-        description: "Your project has been updated successfully.",
-        variant: "success",
-      });
-      return result.data;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to update project",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const handleUpdateProject = useCallback(
+    async (id: string, data: Partial<IProject>) => {
+      setIsSubmitting(true);
+      try {
+        const result = await updateProjectAction(id, data);
+        toast({
+          title: "Project updated",
+          description: "Your project has been updated successfully.",
+          variant: "success",
+        });
+        return result.data;
+      } catch (error) {
+        toast({
+          title: "Error",
+          description:
+            error instanceof Error ? error.message : "Failed to update project",
+          variant: "destructive",
+        });
+        return null;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [toast]
+  );
 
-  const handleDeleteProject = async (id: string) => {
-    setIsDeleting(true);
-    try {
-      await deleteProjectAction(id);
-      toast({
-        title: "Project deleted",
-        description: "Your project has been deleted successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to delete project",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const handleDeleteProject = useCallback(
+    async (id: string) => {
+      setIsDeleting(true);
+      try {
+        await deleteProjectAction(id);
+        toast({
+          title: "Project deleted",
+          description: "Your project has been deleted successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (error) {
+        toast({
+          title: "Error",
+          description:
+            error instanceof Error ? error.message : "Failed to delete project",
+          variant: "destructive",
+        });
+        return false;
+      } finally {
+        setIsDeleting(false);
+      }
+    },
+    [toast]
+  );
 
   return {
     createProject: handleCreateProject,

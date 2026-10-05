@@ -11,15 +11,17 @@ import BlogCard from "../_components/blog/BlogCard";
 
 export default function AdminBlogPage() {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<IBlog | null>(null);
   const [selectedSeries, setSelectedSeries] = useState<string>("all");
 
-  const { getBlogs, deleteBlog, isLoading, isDeleting } = useBlogActions();
+  const { getBlogs, deleteBlog, isDeleting } = useBlogActions();
 
   const fetchBlogs = useCallback(async () => {
     const data = await getBlogs();
     setBlogs(data || []);
+    setInitialLoading(false);
   }, [getBlogs]);
 
   useEffect(() => {
@@ -124,7 +126,7 @@ export default function AdminBlogPage() {
         onSuccess={fetchBlogs}
       />
 
-      {isLoading ? (
+      {initialLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <span className="ml-2 text-muted-foreground">Loading blogs...</span>

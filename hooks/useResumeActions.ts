@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import {
   getResumeLinks,
@@ -26,7 +26,7 @@ export function useResumeLinkActions() {
   const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
 
-  const handleGetResumeLinks = async () => {
+  const handleGetResumeLinks = useCallback(async () => {
     setIsLoading(true);
     try {
       const { links, error } = await getResumeLinks();
@@ -54,9 +54,9 @@ export function useResumeLinkActions() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
-  const handleGetActiveResumeLink = async () => {
+  const handleGetActiveResumeLink = useCallback(async () => {
     setIsLoading(true);
     try {
       const { link, error } = await getActiveResumeLink();
@@ -84,151 +84,163 @@ export function useResumeLinkActions() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
-  const handleCreateResumeLink = async (formData: FormData) => {
-    setIsSubmitting(true);
-    try {
-      const { link, error } = await createResumeLink(formData);
+  const handleCreateResumeLink = useCallback(
+    async (formData: FormData) => {
+      setIsSubmitting(true);
+      try {
+        const { link, error } = await createResumeLink(formData);
 
-      if (error) {
+        if (error) {
+          toast({
+            title: "Error",
+            description: error,
+            variant: "destructive",
+          });
+          return null;
+        }
+
+        toast({
+          title: "Resume link created",
+          description: "Your resume link has been created successfully.",
+          variant: "success",
+        });
+
+        return link;
+      } catch (error) {
         toast({
           title: "Error",
-          description: error,
+          description:
+            error instanceof Error
+              ? error.message
+              : "Failed to create resume link",
           variant: "destructive",
         });
         return null;
+      } finally {
+        setIsSubmitting(false);
       }
+    },
+    [toast]
+  );
 
-      toast({
-        title: "Resume link created",
-        description: "Your resume link has been created successfully.",
-        variant: "success",
-      });
+  const handleUpdateResumeLink = useCallback(
+    async (id: string, formData: FormData) => {
+      setIsSubmitting(true);
+      try {
+        const { link, error } = await updateResumeLinkAction(id, formData);
 
-      return link;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to create resume link",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+        if (error) {
+          toast({
+            title: "Error",
+            description: error,
+            variant: "destructive",
+          });
+          return null;
+        }
 
-  const handleUpdateResumeLink = async (id: string, formData: FormData) => {
-    setIsSubmitting(true);
-    try {
-      const { link, error } = await updateResumeLinkAction(id, formData);
+        toast({
+          title: "Resume link updated",
+          description: "Your resume link has been updated successfully.",
+          variant: "success",
+        });
 
-      if (error) {
+        return link;
+      } catch (error) {
         toast({
           title: "Error",
-          description: error,
+          description:
+            error instanceof Error
+              ? error.message
+              : "Failed to update resume link",
           variant: "destructive",
         });
         return null;
+      } finally {
+        setIsSubmitting(false);
       }
+    },
+    [toast]
+  );
 
-      toast({
-        title: "Resume link updated",
-        description: "Your resume link has been updated successfully.",
-        variant: "success",
-      });
+  const handleDeleteResumeLink = useCallback(
+    async (id: string) => {
+      setIsDeleting(true);
+      try {
+        const { success, error } = await deleteResumeLinkAction(id);
 
-      return link;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to update resume link",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+        if (error) {
+          toast({
+            title: "Error",
+            description: error,
+            variant: "destructive",
+          });
+          return false;
+        }
 
-  const handleDeleteResumeLink = async (id: string) => {
-    setIsDeleting(true);
-    try {
-      const { success, error } = await deleteResumeLinkAction(id);
+        toast({
+          title: "Resume link deleted",
+          description: "Your resume link has been deleted successfully.",
+          variant: "success",
+        });
 
-      if (error) {
+        return success;
+      } catch (error) {
         toast({
           title: "Error",
-          description: error,
+          description:
+            error instanceof Error
+              ? error.message
+              : "Failed to delete resume link",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsDeleting(false);
       }
+    },
+    [toast]
+  );
 
-      toast({
-        title: "Resume link deleted",
-        description: "Your resume link has been deleted successfully.",
-        variant: "success",
-      });
+  const handleSetActiveResumeLink = useCallback(
+    async (id: string) => {
+      setIsSubmitting(true);
+      try {
+        const { link, error } = await setActiveResumeLinkAction(id);
 
-      return success;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to delete resume link",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+        if (error) {
+          toast({
+            title: "Error",
+            description: error,
+            variant: "destructive",
+          });
+          return null;
+        }
 
-  const handleSetActiveResumeLink = async (id: string) => {
-    setIsSubmitting(true);
-    try {
-      const { link, error } = await setActiveResumeLinkAction(id);
+        toast({
+          title: "Active resume link set",
+          description: "Your active resume link has been updated successfully.",
+          variant: "success",
+        });
 
-      if (error) {
+        return link;
+      } catch (error) {
         toast({
           title: "Error",
-          description: error,
+          description:
+            error instanceof Error
+              ? error.message
+              : "Failed to set active resume link",
           variant: "destructive",
         });
         return null;
+      } finally {
+        setIsSubmitting(false);
       }
-
-      toast({
-        title: "Active resume link set",
-        description: "Your active resume link has been updated successfully.",
-        variant: "success",
-      });
-
-      return link;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to set active resume link",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+    [toast]
+  );
 
   return {
     getResumeLinks: handleGetResumeLinks,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import {
   getBlogs as getBlogsAction,
@@ -17,138 +17,150 @@ export function useBlogActions() {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const getBlogs = async (filter?: {
-    featured?: boolean;
-    seriesName?: string;
-  }) => {
-    setIsLoading(true);
-    try {
-      const res = await getBlogsAction(filter);
-      if (!res.success) {
+  const getBlogs = useCallback(
+    async (filter?: { featured?: boolean; seriesName?: string }) => {
+      setIsLoading(true);
+      try {
+        const res = await getBlogsAction(filter);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to fetch blogs",
+            variant: "destructive",
+          });
+          return [];
+        }
+        return res.data || [];
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to fetch blogs",
+          description: err?.message || "Failed to fetch blogs",
           variant: "destructive",
         });
         return [];
+      } finally {
+        setIsLoading(false);
       }
-      return res.data || [];
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to fetch blogs",
-        variant: "destructive",
-      });
-      return [];
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [toast]
+  );
 
-  const getBlogBySlug = async (slug: string) => {
-    setIsLoading(true);
-    try {
-      const res = await getBlogBySlugAction(slug);
-      if (!res.success) {
+  const getBlogBySlug = useCallback(
+    async (slug: string) => {
+      setIsLoading(true);
+      try {
+        const res = await getBlogBySlugAction(slug);
+        if (!res.success) {
+          return null;
+        }
+        return res.data;
+      } catch {
         return null;
+      } finally {
+        setIsLoading(false);
       }
-      return res.data;
-    } catch {
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    []
+  );
 
-  const createBlog = async (data: Partial<IBlog>) => {
-    setIsSubmitting(true);
-    try {
-      const res = await createBlogAction(data);
-      if (!res.success) {
+  const createBlog = useCallback(
+    async (data: Partial<IBlog>) => {
+      setIsSubmitting(true);
+      try {
+        const res = await createBlogAction(data);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to create blog",
+            variant: "destructive",
+          });
+          return false;
+        }
+        toast({
+          title: "Blog created",
+          description: "Blog has been published successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to create blog",
+          description: err?.message || "Failed to create blog",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsSubmitting(false);
       }
-      toast({
-        title: "Blog created",
-        description: "Blog has been published successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to create blog",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+    [toast]
+  );
 
-  const updateBlog = async (id: string, data: Partial<IBlog>) => {
-    setIsSubmitting(true);
-    try {
-      const res = await updateBlogAction(id, data);
-      if (!res.success) {
+  const updateBlog = useCallback(
+    async (id: string, data: Partial<IBlog>) => {
+      setIsSubmitting(true);
+      try {
+        const res = await updateBlogAction(id, data);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to update blog",
+            variant: "destructive",
+          });
+          return false;
+        }
+        toast({
+          title: "Blog updated",
+          description: "Blog details updated successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to update blog",
+          description: err?.message || "Failed to update blog",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsSubmitting(false);
       }
-      toast({
-        title: "Blog updated",
-        description: "Blog details updated successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to update blog",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+    [toast]
+  );
 
-  const deleteBlog = async (id: string) => {
-    setIsDeleting(id);
-    try {
-      const res = await deleteBlogAction(id);
-      if (!res.success) {
+  const deleteBlog = useCallback(
+    async (id: string) => {
+      setIsDeleting(id);
+      try {
+        const res = await deleteBlogAction(id);
+        if (!res.success) {
+          toast({
+            title: "Error",
+            description: res.error || "Failed to delete blog",
+            variant: "destructive",
+          });
+          return false;
+        }
+        toast({
+          title: "Blog deleted",
+          description: "Blog has been deleted successfully.",
+          variant: "success",
+        });
+        return true;
+      } catch (err: any) {
         toast({
           title: "Error",
-          description: res.error || "Failed to delete blog",
+          description: err?.message || "Failed to delete blog",
           variant: "destructive",
         });
         return false;
+      } finally {
+        setIsDeleting(null);
       }
-      toast({
-        title: "Blog deleted",
-        description: "Blog has been deleted successfully.",
-        variant: "success",
-      });
-      return true;
-    } catch (err: any) {
-      toast({
-        title: "Error",
-        description: err?.message || "Failed to delete blog",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsDeleting(null);
-    }
-  };
+    },
+    [toast]
+  );
 
   return {
     getBlogs,

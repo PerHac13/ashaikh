@@ -21,17 +21,19 @@ import { IProject as Project, UseProjectActionsReturn } from "@/types/project";
 
 const ProjectPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [uploadedUrl, setUploadedUrl] = useState<string>("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   // const [setFeaturedId, setSetFeaturedId] = useState<string | null>(null);
 
-  const { getProjects, deleteProject, isLoading } =
+  const { getProjects, deleteProject } =
     useProjectActions() as UseProjectActionsReturn;
 
   const fetchProjects = useCallback(async () => {
     const data = await getProjects();
     setProjects(data || []);
+    setInitialLoading(false);
   }, [getProjects]);
 
   useEffect(() => {
@@ -105,7 +107,7 @@ const ProjectPage: React.FC = () => {
         </Dialog>
       </div>
 
-      {isLoading ? (
+      {initialLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="h-8 w-8 animate-spin" />
           <span className="ml-2">Loading projects...</span>

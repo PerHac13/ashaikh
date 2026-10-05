@@ -22,18 +22,20 @@ import { ResumeLink, UseResumeLinkActionsReturn } from "@/types/resume";
 
 const ResumePage: React.FC = () => {
   const [links, setLinks] = useState<ResumeLink[]>([]);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [editingResume, setEditingResume] = useState<ResumeLink | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string>("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [setActiveId, setSetActiveId] = useState<string | null>(null);
 
-  const { getResumeLinks, deleteResumeLink, setActiveResumeLink, isLoading } =
+  const { getResumeLinks, deleteResumeLink, setActiveResumeLink } =
     useResumeLinkActions() as UseResumeLinkActionsReturn;
 
   const fetchLinks = useCallback(async () => {
     const data = await getResumeLinks();
     setLinks(data || []);
+    setInitialLoading(false);
   }, [getResumeLinks]);
 
   useEffect(() => {
@@ -121,7 +123,7 @@ const ResumePage: React.FC = () => {
         />
       )}
 
-      {isLoading ? (
+      {initialLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <span className="ml-2 text-muted-foreground">Loading resume links...</span>
