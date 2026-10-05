@@ -26,6 +26,9 @@ const ProjectPage: React.FC = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   // const [setFeaturedId, setSetFeaturedId] = useState<string | null>(null);
 
+  const { getProjects, deleteProject, isLoading } =
+    useProjectActions() as UseProjectActionsReturn;
+
   const fetchProjects = useCallback(async () => {
     const data = await getProjects();
     setProjects(data || []);

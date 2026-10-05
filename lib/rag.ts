@@ -44,7 +44,7 @@ export async function getPortfolioContext(): Promise<string> {
     let markdown = `# Professional Portfolio of Shaikh Abdullah\n\n`;
 
     markdown += `## About Shaikh Abdullah\n`;
-    markdown += `Shaikh Abdullah is a Senior pursuing a B.Tech in Computer Science and Engineering at the Indian Institute of Information Technology-Bhagalpur (IIIT-Bhagalpur). Raised on computers, he kickstarted his coding journey at age 16 with C. He is a passionate, self-driven engineer specializing in building full-stack web applications and solving problems. Outside of technology, he is an avid reader, an amateur writer, and appreciates good literature.\n\n`;
+    markdown += `Shaikh Abdullah obtained his B.Tech in Computer Science and Engineering from the Indian Institute of Information Technology in Bhagalpur. Raised on computers, he began coding at age 16 with C. He is a passionate engineer dedicated to continuous learning, practice, discipline, and fundamental principles. Outside of work, he enjoys reading, writing, and appreciating good literature.\n\n`;
 
     markdown += `## Professional Experience\n`;
     if (experiences.length === 0) {

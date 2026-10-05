@@ -11,20 +11,16 @@ import {
 } from "@/actions/projectActions";
 
 export function useProjectActions() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
 
   const handleGetProjects = async () => {
-    setIsSubmitting(true);
+    setIsLoading(true);
     try {
       const result = await getProjects();
-      toast({
-        title: "Projects fetched",
-        description: "Projects have been fetched successfully.",
-        variant: "success",
-      });
-      return result.data;
+      return result.data || [];
     } catch (error) {
       toast({
         title: "Error",
@@ -34,7 +30,7 @@ export function useProjectActions() {
       });
       return [];
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -112,6 +108,7 @@ export function useProjectActions() {
     updateProject: handleUpdateProject,
     deleteProject: handleDeleteProject,
     getProjects: handleGetProjects,
+    isLoading,
     isSubmitting,
     isDeleting,
   };
