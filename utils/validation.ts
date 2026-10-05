@@ -249,4 +249,69 @@ export const validateDeleteProject = (
 export const resumeLinkSchema = z.object({
   name: z.string().min(1, "Name is required"),
   url: z.string().url("Valid URL is required"),
+  slug: z.string().optional().default(""),
 });
+
+// Achievement validation
+export const achievementSchema = z.object({
+  title: z
+    .string({ required_error: "Title is required" })
+    .min(2, "Title must be at least 2 characters"),
+  organization: z.string().optional().default(""),
+  date: z.coerce.date({
+    required_error: "Date is required",
+    invalid_type_error: "Date must be a valid date",
+  }),
+  description: z.array(z.string()).default([]),
+  category: z.string().optional().default("Milestone"),
+  link: z.string().optional().default(""),
+  imagePath: z.string().optional().default(""),
+  featured: z.boolean().optional().default(true),
+  score: z.number().optional().default(0),
+});
+
+export const updateAchievementSchema = achievementSchema.partial();
+
+export type AchievementData = z.infer<typeof achievementSchema>;
+export type UpdateAchievementData = z.infer<typeof updateAchievementSchema>;
+
+// Blog validation
+export const blogSchema = z.object({
+  title: z
+    .string({ required_error: "Title is required" })
+    .min(2, "Title must be at least 2 characters"),
+  slug: z
+    .string({ required_error: "Slug is required" })
+    .min(1, "Slug is required"),
+  description: z
+    .string({ required_error: "Description is required" })
+    .min(1, "Description is required"),
+  redirectUrl: z
+    .string({ required_error: "Redirect URL is required" })
+    .url("Valid URL is required"),
+  platform: z.string().optional().default("Medium"),
+  publishedAt: z.coerce.date({
+    required_error: "Publish date is required",
+    invalid_type_error: "Publish date must be a valid date",
+  }),
+  tags: z.array(z.string()).default([]),
+  isSeries: z.boolean().optional().default(false),
+  seriesName: z.string().optional().default(""),
+  seriesPart: z.number().optional().default(1),
+  relatedLinks: z
+    .array(
+      z.object({
+        title: z.string(),
+        url: z.string(),
+      })
+    )
+    .default([]),
+  featured: z.boolean().optional().default(true),
+  readTime: z.string().optional().default("5 min read"),
+});
+
+export const updateBlogSchema = blogSchema.partial();
+
+export type BlogData = z.infer<typeof blogSchema>;
+export type UpdateBlogData = z.infer<typeof updateBlogSchema>;
+

@@ -17,6 +17,8 @@ export default function Nav() {
     "about",
     "experience",
     "projects",
+    "achievements",
+    "blogs",
     "contact",
   ]);
 
@@ -24,6 +26,8 @@ export default function Nav() {
     { label: "About", href: "#about" },
     { label: "Experience", href: "#experience" },
     { label: "Projects", href: "#projects" },
+    { label: "Achievements", href: "#achievements" },
+    { label: "Blogs", href: "#blogs" },
     { label: "Contact", href: "#contact" },
   ];
 

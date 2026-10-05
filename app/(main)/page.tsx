@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import Nav from "@/components/Nav";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
+import Achievements from "@/components/Achievements";
+import Blogs from "@/components/Blogs";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -24,6 +26,8 @@ export default function Home() {
           <About />
           <Experience />
           <Projects />
+          <Achievements />
+          <Blogs />
           <Contact />
           <Footer />
         </main>
