@@ -18,35 +18,39 @@ export default function About() {
             {" "}
             Computer Science and Engineering
           </span>
-          , my journey into the tech world began early on. Born to a father
-          deeply entrenched in technology, I was practically raised on
-          computers. This environment fueled my curiosity, leading me to
-          officially kickstart my technical journey at around 16 years old,
-          mastering the art of writing basic code, including the iconic &quot;
+          , and my path into the technology sector started quite early. Since my
+          father was deeply involved in technology, I was essentially brought up
+          with computers. This surroundings sparked my curiosity and eventually
+          led me to begin my technical studies when I was about 16 years old,
+          learning how to write simple code, such as the well-known &quot;
           <span className="no-wrap text-primary dark:text-white">
             Hello World
           </span>
-          &quot; in C.
+          &quot; program in C.
         </p>
         <p className="text-start text-muted-foreground lg:px-6">
-          Oh, the grandeur of it all! Embarking on my technical odyssey, I
-          marveled at the complexity of printing &quot;Hello World&quot; in C.
-          Who needs Shakespeare when you&apos;ve got this timeless masterpiece
-          echoing through the command line? Since then, I&apos;ve traversed a
-          path of continuous learning and exploration. Even in this chaotic
-          world of tech, I still believe that learning and teaching are continuous
-          things that drive us forward, understanding that development is more than
-          just code—it&apos;s a harmonious blend of practice, discipline, and
-          unwavering dedication to core principles.
-        </p>
-        <p className="text-start text-muted-foreground lg:px-6">
-          Outside of work, I&#39;m an avid reader, an amateur writer, can say
-          appreciate good literature. I try to keep myself updated with the
-          latest trends in technology and I am always looking for new
-          opportunities to learn and grow. Looking forward, Just trying to feel
-          the essence of what it means{" "}
+          What a magnificent thing it is! When I began my journey into technical
+          subjects, I was amazed by how complex it was to print out &quot;
           <span className="no-wrap text-primary dark:text-white">
-            to be engineer
+            Hello World
+          </span>
+          &quot; in C. Who indeed would need Shakespeare when you have this
+          classic masterpiece resounding across the command line? Ever since
+          then, I have followed a path based on constant learning and
+          exploration. Even in this turbulent world of technology, I still think
+          that learning and teaching are ongoing activities which move us forward,
+          realizing that development involves more than just writing code - it is
+          a harmonious combination of practice, discipline, and a steadfast
+          dedication to fundamental principles.
+        </p>
+        <p className="text-start text-muted-foreground lg:px-6">
+          When I&apos;m not at work, I enjoy reading a lot, take an interest in
+          writing and have an appreciation for good literature. I make it a point
+          of keeping up to date with the latest developments in technology and am
+          always on the lookout for new chances to learn and develop. As for the
+          future, all I want to do is grasp the essence of what it means{" "}
+          <span className="no-wrap text-primary dark:text-white">
+            to be an engineer
           </span>
           .
         </p>
