@@ -2,6 +2,8 @@ import dbConnect from "@/lib/dbConnect";
 import Project from "@/models/Project";
 import Experience from "@/models/Experience";
 import ResumeLink from "@/models/Resume";
+import Achievement from "@/models/Achievement";
+import Blog from "@/models/Blog";
 
 function formatDate(date?: Date | string): string {
   if (!date) return "Present";
@@ -10,16 +12,14 @@ function formatDate(date?: Date | string): string {
   return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
-// 1. Fetch Experiences
-// 2. Fetch Projects
-// 3. Fetch Resume Link
-// 4. Extract PDF text on-the-fly and cache it in DB if not already cached
 export async function getPortfolioContext(): Promise<string> {
   await dbConnect();
 
   try {
     const experiences = await Experience.find().sort({ currentlyWorking: -1, startDate: -1 });
     const projects = await Project.find().sort({ featured: -1, "timeline.start": -1 });
+    const achievements = await Achievement.find().sort({ date: -1 });
+    const blogs = await Blog.find().sort({ publishedAt: -1 });
     const resumeLink = await ResumeLink.findOne({ isActive: true });
 
     let extractedResumeText = "";
@@ -103,6 +103,48 @@ export async function getPortfolioContext(): Promise<string> {
           proj.description.forEach((desc) => {
             markdown += `  * ${desc}\n`;
           });
+        }
+        markdown += `\n`;
+      });
+    }
+
+    markdown += `## Achievements & Honors\n`;
+    if (achievements.length === 0) {
+      markdown += `No achievements found.\n\n`;
+    } else {
+      achievements.forEach((ach) => {
+        const date = formatDate(ach.date);
+        markdown += `### ${ach.title}\n`;
+        markdown += `- **Organization/Issuer**: ${ach.organization || "N/A"}\n`;
+        markdown += `- **Category**: ${ach.category || "Milestone"}\n`;
+        markdown += `- **Date**: ${date}\n`;
+        if (ach.link) markdown += `- **Proof/Link**: ${ach.link}\n`;
+        if (ach.description && ach.description.length > 0) {
+          markdown += `- **Highlights**:\n`;
+          ach.description.forEach((d) => {
+            markdown += `  * ${d}\n`;
+          });
+        }
+        markdown += `\n`;
+      });
+    }
+
+    markdown += `## Articles & Blog Series\n`;
+    if (blogs.length === 0) {
+      markdown += `No articles found.\n\n`;
+    } else {
+      blogs.forEach((b) => {
+        const date = formatDate(b.publishedAt);
+        markdown += `### ${b.title}\n`;
+        markdown += `- **Summary**: ${b.description}\n`;
+        markdown += `- **Link**: ${b.redirectUrl}\n`;
+        markdown += `- **Platform**: ${b.platform || "Medium"}\n`;
+        markdown += `- **Published**: ${date}\n`;
+        if (b.isSeries && b.seriesName) {
+          markdown += `- **Series**: ${b.seriesName} (Part ${b.seriesPart || 1})\n`;
+        }
+        if (b.tags && b.tags.length > 0) {
+          markdown += `- **Topics**: ${b.tags.join(", ")}\n`;
         }
         markdown += `\n`;
       });
