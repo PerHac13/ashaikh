@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useResumeLinkActions } from "@/hooks/useResumeActions";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,14 +31,14 @@ const ResumePage: React.FC = () => {
   const { getResumeLinks, deleteResumeLink, setActiveResumeLink, isLoading } =
     useResumeLinkActions() as UseResumeLinkActionsReturn;
 
-  const fetchLinks = async () => {
+  const fetchLinks = useCallback(async () => {
     const data = await getResumeLinks();
     setLinks(data || []);
-  };
+  }, [getResumeLinks]);
 
   useEffect(() => {
     fetchLinks();
-  }, []);
+  }, [fetchLinks]);
 
   const handleDialogClose = () => {
     setDialogOpen(false);

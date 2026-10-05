@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, Trophy } from "lucide-react";
 import { IAchievement } from "@/types/achievement";
@@ -18,14 +18,14 @@ export default function AdminAchievementPage() {
   const { getAchievements, deleteAchievement, isLoading, isDeleting } =
     useAchievementActions();
 
-  const fetchAchievements = async () => {
+  const fetchAchievements = useCallback(async () => {
     const data = await getAchievements();
     setAchievements(data || []);
-  };
+  }, [getAchievements]);
 
   useEffect(() => {
     fetchAchievements();
-  }, []);
+  }, [fetchAchievements]);
 
   const handleOpenCreate = () => {
     setEditingAchievement(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -43,7 +43,7 @@ export default function AdminAnalyticsPage() {
   const [visitorStats, setVisitorStats] = useState<VisitorAnalyticsStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     setIsLoading(true);
     try {
       const [summaryRes, visitorRes] = await Promise.all([
@@ -62,11 +62,11 @@ export default function AdminAnalyticsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchAnalytics();
-  }, []);
+  }, [fetchAnalytics]);
 
   const maxDailyViews = Math.max(
     ...(visitorStats?.dailyTrend.map((d) => d.views) || [1]),

@@ -5,11 +5,10 @@ export const revalidate = 0;
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> | { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const resolvedParams = await Promise.resolve(params);
-    const slug = resolvedParams.slug;
+    const { slug } = await params;
 
     if (slug) {
       const { success, data: blog } = await getBlogBySlug(slug);

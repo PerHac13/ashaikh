@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Loader2, Plus, BookOpen, Layers } from "lucide-react";
@@ -17,14 +17,14 @@ export default function AdminBlogPage() {
 
   const { getBlogs, deleteBlog, isLoading, isDeleting } = useBlogActions();
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = useCallback(async () => {
     const data = await getBlogs();
     setBlogs(data || []);
-  };
+  }, [getBlogs]);
 
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [fetchBlogs]);
 
   const handleOpenCreate = () => {
     setEditingBlog(null);
